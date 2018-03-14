@@ -87,8 +87,8 @@ p = p0 * (1 + labda * hp0 / Temp0) ** (-g / labda / R)
 
 M_calc_1 = 1 + (gamma - 1) / (2 * gamma) * rho0 / p0 * V0**2
 M_calc_2 = M_calc_1**(gamma / (gamma - 1)) - 1
-M_calc_3 = (1 + p0/p * M_calc_2) ** ((gamma - 1) / gamma)
-M = np.sqrt(2 / (gamma - 1) * (M_calc_3 - 1))
+M_calc_3 = (1 + p0/p * M_calc_2) ** ((gamma - 1) / gamma) - 1
+M = np.sqrt(2 / (gamma - 1) * M_calc_3)
 
 T = Tmeas / (1 + (gamma - 1) / 2 * M**2)
 
@@ -105,7 +105,7 @@ KXZ    = 0.002
 KY2    = 1.25 * 1.114
 
 # Lift coefficient
-CL = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
+CL = 2 * W / (rho * Vt ** 2 * S)              # Lift coefficient [ ]
 
 #Plotting and finding CLa
 CLa, intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_deg,CL) # Lots of unused (uu_) values
@@ -113,7 +113,9 @@ CLa, intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_deg,
 linregress_x = np.array([min(alpha_deg), max(alpha_deg)])
 linregress_y = intercept + CLa * linregress_x
 
-plt.plot(linregress_x, linregress_y)
+CLalabel = 'CLa = '+str(CLa)
+
+plt.plot(linregress_x, linregress_y, label = CLalabel)
 plt.scatter(alpha_deg, CL)
 plt.ylabel('CL [-]')
 plt.xlabel('alpha [deg]')
@@ -121,7 +123,7 @@ plt.savefig('CL_alphadeg.png')
 
 # CD calculations
 T_ISA = Temp0 + labda * hp0
-DeltaT = abs(T_ISA - T)
+DeltaT = T - T_ISA
 
 outfile = open('matlab.dat', 'w')
 for i in range(n_tests):
@@ -129,61 +131,58 @@ for i in range(n_tests):
 outfile.close()
 
 # This doesn't work on my device, sadly
-# os.system('java -jar thrust.jar')
+#os.system('java -jar Thrust.jar')
 
-dummy = input("Only continue if thrust.dat exists.")
+dummy = input("Continue when thrust.dat is updated.")
 
 infile = np.genfromtxt('thrust.dat').T
 T1 = infile[0]
 T2 = infile[1]
 Ttotal = T1 + T2
 
-CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
+CD = 2 * Ttotal / (rho * Vt ** 2 * S) 
 
-# Aerodynamic constants
+CL_sq = CL**2
 
-Cmac   = 0                      # Moment coefficient about the aerodynamic centre [ ]
-CNwa   = CLa                    # Wing normal force slope [ ]
-CNha   = 2 * pi * Ah / (Ah + 2) # Stabiliser normal force slope [ ]
-depsda = 4 / (A + 2)            # Downwash gradient [ ]
+#Plotting CL2-CD, find e and CD0
+slope, CD0, uu_r_value, uu_p_value, uu_std_err = stats.linregress(CL_sq,CD) # Lots of unused (uu_) values
 
-# Stabiblity derivatives
+linregress_x = np.array([min(CL_sq), max(CL_sq)])
+linregress_y = CD0 + slope * linregress_x
 
-CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
-CXu    = -0.02792
-CXa    = -0.47966
-CXadot = +0.08330
-CXq    = -0.28170
-CXde   = -0.03728
+oswald = 1 / (pi * A * slope)
 
-CZ0    = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
-CZu    = -0.37616
-CZa    = -5.74340
-CZadot = -0.00350
-CZq    = -5.66290
-CZde   = -0.69612
+CDlabel = 'CD0 = '+str(CD0)+', e = '+str(oswald)
 
-Cmu    = +0.06990
-Cmadot = +0.17800
-Cmq    = -8.79415
+plt.plot(linregress_x, linregress_y)
+plt.scatter(CL_sq, CD)
+plt.ylabel('CL^2 [-]')
+plt.xlabel('CD [-]')
+plt.savefig('CL2_CD.png')
 
-CYb    = -0.7500
-CYbdot =  0     
-CYp    = -0.0304
-CYr    = +0.8495
-CYda   = -0.0400
-CYdr   = +0.2300
+#Plotting CL-CD
+p = np.polyfit(CD,CL,2)
+x = np.linspace(min(CL),max(CL),50)
+y = p[0]*x**2 + p[1]*x + p[2]
 
-Clb    = -0.10260
-Clp    = -0.71085
-Clr    = +0.23760
-Clda   = -0.23088
-Cldr   = +0.03440
+plt.plot(x,y)
+plt.scatter(CL, CD)
+plt.ylabel('CL [-]')
+plt.xlabel('CD [-]')
+plt.savefig('CL_CD.png')
 
-Cnb    =  +0.1348
-Cnbdot =   0     
-Cnp    =  -0.0602
-Cnr    =  -0.2061
-Cnda   =  -0.0120
-Cndr   =  -0.0939
+
+#Plotting CD-a
+CDa, intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_deg,CD) # Lots of unused (uu_) values
+
+linregress_x = np.array([min(alpha_deg), max(alpha_deg)])
+linregress_y = intercept + CDa * linregress_x
+
+CLalabel = 'CDa = '+str(CLa)
+
+plt.plot(linregress_x, linregress_y, label = CLalabel)
+plt.scatter(alpha_deg, CL)
+plt.ylabel('CD [-]')
+plt.xlabel('alpha [deg]')
+plt.savefig('CL_alphadeg.png')
 
