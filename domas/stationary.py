@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
-import os 
+import os
+import codecs
 
 pi = np.pi
 gamma = 1.4
@@ -125,16 +126,16 @@ plt.savefig('CL_alphadeg.png')
 T_ISA = Temp0 + labda * hp0
 DeltaT = T - T_ISA
 rnd = 4
-outfile = open('matlab.dat', 'w')
-for i in range(n_tests):
-    str1 = str(round(hp0[i],rnd))+'    '
-    str2 = str(round(M[i],rnd))+'    '
-    str3 = str(round(DeltaT[i],rnd))+'    '
-    str4 = str(round(FFl[i],rnd))+'    '
-    str5 = str(round(FFr[i],rnd))+'\n'
-    strtot = str1+str2+str3+str4+str5
-    outfile.write(strtot)
-outfile.close()
+with codecs.open('matlab.dat','w',encoding='utf8') as f:
+    for i in range(n_tests):
+        str1 = str(round(hp0[i],rnd))+'    '
+        str2 = str(round(M[i],rnd))+'    '
+        str3 = str(round(DeltaT[i],rnd))+'    '
+        str4 = str(round(FFl[i],rnd))+'    '
+        str5 = str(round(FFr[i],rnd))+'\r\n'
+        strtot = str1+str2+str3+str4+str5
+        f.write(strtot)
+    f.close()
 
 # This doesn't work on my device, sadly
 os.system('java -jar Thrust.jar')
