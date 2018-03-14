@@ -128,10 +128,10 @@ DeltaT = T - T_ISA
 rnd = 4
 with codecs.open('matlab.dat','w',encoding='utf8') as f:
     for i in range(n_tests):
-        str1 = str(round(hp0[i],rnd))+'    '
-        str2 = str(round(M[i],rnd))+'    '
-        str3 = str(round(DeltaT[i],rnd))+'    '
-        str4 = str(round(FFl[i],rnd))+'    '
+        str1 = str(round(hp0[i],rnd))+'\t'
+        str2 = str(round(M[i],rnd))+'\t'
+        str3 = str(round(DeltaT[i],rnd))+'\t'
+        str4 = str(round(FFl[i],rnd))+'\t'
         str5 = str(round(FFr[i],rnd))+'\r\n'
         strtot = str1+str2+str3+str4+str5
         f.write(strtot)
