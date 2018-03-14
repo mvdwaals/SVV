@@ -77,7 +77,7 @@ g      = 9.81            # [m/sec^2] (gravity constant)
 
 # Added
 p0 = 101325 #[N/m2]
-a = 343 #[m/s]
+
 
 # air density [kg/m^3]  
 rho    = rho0 * ((1+(labda * hp0 / Temp0)))**(-((g / (labda*R)) + 1))   
@@ -92,12 +92,12 @@ M_calc_3 = (1 + p0/p * M_calc_2) ** ((gamma - 1) / gamma) - 1
 M = np.sqrt(2 / (gamma - 1) * M_calc_3)
 
 T = Tmeas / (1 + (gamma - 1) / 2 * M**2)
-
+a = np.sqrt(gamma * R * T)
 Vt = M * a
 Ve = Vt * np.sqrt(rho / rho0)
 
 # Lift coefficient
-CL = 2 * W / (rho * Vt ** 2 * S)              # Lift coefficient [ ]
+CL = 2 * W / (rho * Vt**2 * S)              # Lift coefficient [ ]
 
 #Plotting and finding CLa
 CLa, intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_deg,CL) # Lots of unused (uu_) values
@@ -120,20 +120,18 @@ plt.clf()
 # CD calculations
 T_ISA = Temp0 + labda * hp0
 DeltaT = T - T_ISA
-rnd = 4
 with codecs.open('matlab.dat','w',encoding='utf8') as f:
     for i in range(n_tests):
-        str1 = str(round(hp0[i],rnd))+'\t'
-        str2 = str(round(M[i],rnd))+'\t'
-        str3 = str(round(DeltaT[i],rnd))+'\t'
-        str4 = str(round(FFl[i],rnd))+'\t'
-        str5 = str(round(FFr[i],rnd))+'\r\n'
+        str1 = str(hp0[i])+'\t'
+        str2 = str(M[i])+'\t'
+        str3 = str(DeltaT[i])+'\t'
+        str4 = str(FFl[i])+'\t'
+        str5 = str(FFr[i])+'\r\n'
         strtot = str1+str2+str3+str4+str5
         f.write(strtot)
     f.close()
 
-# This doesn't work on my device, sadly
-os.system('java -jar Thrust.jar')
+os.system('java -jar thrust.jar')
 
 #dummy = input("Press any key when thrust.dat is updated.")
 
@@ -142,7 +140,7 @@ T1 = infile[0]
 T2 = infile[1]
 Ttotal = T1 + T2
 
-CD = 2 * Ttotal / (rho * Vt ** 2 * S) 
+CD = 2 * Ttotal / (rho * Vt ** 2 * S)
 
 CL_sq = CL**2
 
