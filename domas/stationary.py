@@ -14,12 +14,12 @@ lbs_kg = 0.453592
 
 # h[ft] v[kts] tat[c] ffl[lbs/hr] ffr[lbs/hr] wf[lbs] alpha[deg]
 data_not_si = np.array([#[5010, 248, 11.2, 768, 784, 215, 1.5],
-                        [6040, 251, 10.5, 786, 776, 407, 1.3],
-                        [6030, 222, 8.0, 637, 652, 452, 2.0],
-                        [6030, 191, 6.0, 516, 548, 487, 3.0],
-                        [6040, 165, 4.8, 549, 468, 540, 5.0],
-                        [6030, 131, 3.5, 373, 385, 574, 8.3],
-                        [6040, 115, 3.2, 414, 436, 604, 10.1]])
+                        [6040, 251, 10.5, 786, 776, 410, 1.3],
+                        [6035, 222, 8.2, 637, 650, 450, 2.0],
+                        [6030, 192, 6.1, 515, 548, 487, 3.0],
+                        [6040, 165, 4.8, 558, 470, 540, 4.5],
+                        [6030, 130, 3.5, 373, 385, 574, 8.3],
+                        [6040, 115, 3.0, 414, 435, 604, 10.1]])
 
 n_tests = len(data_not_si)
 
@@ -123,17 +123,20 @@ plt.savefig('CL_alphadeg.png')
 T_ISA = Temp0 + labda * hp0
 DeltaT = abs(T_ISA - T)
 
-'''
+outfile = open('matlab.dat', 'w')
 for i in range(n_tests):
-    infile = open('matlab.dat', 'w')
-    infile.write(str(hp0[i])+' '+str(M[i])+' '+str(DeltaT[i])+' '+str(FFl[i])+' '+str(FFr[i]))
-    infile.close()
-    os.system('java -jar thrust.jar')
-    outfile = open('thrust.dat')
-    outstr = outfile.read()
-    print(outstr)
-    outfile.close()
-'''
+    outfile.write(str(hp0[i])+' '+str(M[i])+' '+str(DeltaT[i])+' '+str(FFl[i])+' '+str(FFr[i]))
+outfile.close()
+
+# This doesn't work on my device, sadly
+# os.system('java -jar thrust.jar')
+
+dummy = input("Only continue if thrust.dat exists.")
+
+infile = np.genfromtxt('thrust.dat').T
+T1 = infile[0]
+T2 = infile[1]
+Ttotal = T1 + T2
 
 CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
 
