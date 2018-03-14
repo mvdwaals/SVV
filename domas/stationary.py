@@ -44,7 +44,7 @@ total_fuel_kg = total_fuel_lbs * lbs_kg
 m_tot = sum(person_weight_kg) + empty_weight_kg + total_fuel_kg
 
 hp0 = h_ft * ft_m
-V0 = V_kts * kts_ms
+Vc = V_kts * kts_ms
 alpha0 = np.radians(alpha_deg)
 th0 = alpha0 # Slope was zero for all these measurements
 m = m_tot - Wf_lbs * lbs_kg
@@ -86,7 +86,7 @@ W      = m * g            # [N]       (aircraft weight)
 # ISA calculations
 p = p0 * (1 + labda * hp0 / Temp0) ** (-g / labda / R)
 
-M_calc_1 = 1 + (gamma - 1) / (2 * gamma) * rho0 / p0 * V0**2
+M_calc_1 = 1 + (gamma - 1) / (2 * gamma) * rho0 / p0 * Vc**2
 M_calc_2 = M_calc_1**(gamma / (gamma - 1)) - 1
 M_calc_3 = (1 + p0/p * M_calc_2) ** ((gamma - 1) / gamma) - 1
 M = np.sqrt(2 / (gamma - 1) * M_calc_3)
@@ -120,7 +120,10 @@ plt.plot(linregress_x, linregress_y, label = CLalabel)
 plt.scatter(alpha_deg, CL)
 plt.ylabel('CL [-]')
 plt.xlabel('alpha [deg]')
+plt.legend()
 plt.savefig('CL_alphadeg.png')
+plt.cla()
+plt.clf()
 
 # CD calculations
 T_ISA = Temp0 + labda * hp0
@@ -140,7 +143,7 @@ with codecs.open('matlab.dat','w',encoding='utf8') as f:
 # This doesn't work on my device, sadly
 os.system('java -jar Thrust.jar')
 
-dummy = input("Continue when thrust.dat is updated.")
+#dummy = input("Press any key when thrust.dat is updated.")
 
 infile = np.genfromtxt('thrust.dat').T
 T1 = infile[0]
@@ -151,7 +154,7 @@ CD = 2 * Ttotal / (rho * Vt ** 2 * S)
 
 CL_sq = CL**2
 
-#Plotting CL2-CD, find e and CD0
+#Plotting CLsq-CD, find e and CD0
 slope, CD0, uu_r_value, uu_p_value, uu_std_err = stats.linregress(CL_sq,CD) # Lots of unused (uu_) values
 
 linregress_x = np.array([min(CL_sq), max(CL_sq)])
@@ -161,22 +164,27 @@ oswald = 1 / (pi * A * slope)
 
 CDlabel = 'CD0 = '+str(CD0)+', e = '+str(oswald)
 
-plt.plot(linregress_x, linregress_y)
+plt.plot(linregress_x, linregress_y, label=CDlabel)
 plt.scatter(CL_sq, CD)
-plt.ylabel('CL^2 [-]')
-plt.xlabel('CD [-]')
+plt.ylabel('CD [-]')
+plt.xlabel('CL^2 [-]')
+plt.legend()
 plt.savefig('CL2_CD.png')
+plt.cla()
+plt.clf()
 
 #Plotting CL-CD
-p = np.polyfit(CD,CL,2)
-x = np.linspace(min(CL),max(CL),50)
-y = p[0]*x**2 + p[1]*x + p[2]
+#p = np.polyfit(CD,CL,2)
+#x = np.linspace(min(CL),max(CL),50)
+#y = p[0]*x**2 + p[1]*x + p[2]
 
-plt.plot(x,y)
-plt.scatter(CL, CD)
-plt.ylabel('CL [-]')
-plt.xlabel('CD [-]')
+#plt.plot(x,y)
+plt.plot(CD, CL, 's-')
+plt.ylabel('CD [-]')
+plt.xlabel('CL [-]')
 plt.savefig('CL_CD.png')
+plt.cla()
+plt.clf()
 
 
 #Plotting CD-a
@@ -188,8 +196,13 @@ linregress_y = intercept + CDa * linregress_x
 CLalabel = 'CDa = '+str(CLa)
 
 plt.plot(linregress_x, linregress_y, label = CLalabel)
-plt.scatter(alpha_deg, CL)
+plt.scatter(alpha_deg, CD)
 plt.ylabel('CD [-]')
 plt.xlabel('alpha [deg]')
-plt.savefig('CL_alphadeg.png')
+plt.legend()
+plt.savefig('CD_alphadeg.png')
+plt.cla()
+plt.clf()
+
+print('Graphs exported.')
 
