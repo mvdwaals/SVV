@@ -124,14 +124,20 @@ plt.savefig('CL_alphadeg.png')
 # CD calculations
 T_ISA = Temp0 + labda * hp0
 DeltaT = T - T_ISA
-
+rnd = 4
 outfile = open('matlab.dat', 'w')
 for i in range(n_tests):
-    outfile.write(str(hp0[i])+' '+str(M[i])+' '+str(DeltaT[i])+' '+str(FFl[i])+' '+str(FFr[i])+'\n')
+    str1 = str(round(hp0[i],rnd))+'    '
+    str2 = str(round(M[i],rnd))+'    '
+    str3 = str(round(DeltaT[i],rnd))+'    '
+    str4 = str(round(FFl[i],rnd))+'    '
+    str5 = str(round(FFr[i],rnd))+'\n'
+    strtot = str1+str2+str3+str4+str5
+    outfile.write(strtot)
 outfile.close()
 
 # This doesn't work on my device, sadly
-#os.system('java -jar Thrust.jar')
+os.system('java -jar Thrust.jar')
 
 dummy = input("Continue when thrust.dat is updated.")
 
