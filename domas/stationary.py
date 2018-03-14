@@ -125,7 +125,7 @@ DeltaT = abs(T_ISA - T)
 
 outfile = open('matlab.dat', 'w')
 for i in range(n_tests):
-    outfile.write(str(hp0[i])+' '+str(M[i])+' '+str(DeltaT[i])+' '+str(FFl[i])+' '+str(FFr[i]))
+    outfile.write(str(hp0[i])+' '+str(M[i])+' '+str(DeltaT[i])+' '+str(FFl[i])+' '+str(FFr[i])+'\n')
 outfile.close()
 
 # This doesn't work on my device, sadly
