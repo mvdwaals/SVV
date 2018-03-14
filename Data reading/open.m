@@ -30,4 +30,11 @@ Vtas = flightdata.Dadc1_tas.data;
 hrate = flightdata.Dadc1_altRate.data;
 measure = flightdata.measurement_running.data;
 
-plot(t,h)
+%short period: 3200 - 3250
+%phugoid: 3250 - 3500
+%aperiodic roll: 3550 - 3600
+%Dutch roll without damper: 3660 - 3690
+%Dutch roll with damper: 3725 - 3745
+%spiral: 3890 - 4050
+
+plot(t,roll)
