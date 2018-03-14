@@ -14,10 +14,10 @@ lbshr_kgs = 0.000125998
 lbs_kg = 0.453592
 
 # h[ft] v[kts] tat[c] ffl[lbs/hr] ffr[lbs/hr] wf[lbs] alpha[deg]
-data_not_si = np.array([#[5010, 248, 11.2, 768, 784, 215, 1.5],
+data_not_si = np.array([#[5010, 248, 11.2, 768, 784, 215, 1.5], # This is a test measurement
                         [6040, 251, 10.5, 786, 776, 410, 1.3],
                         [6035, 222, 8.2, 637, 650, 450, 2.0],
-                        [6030, 192, 6.1, 515, 548, 487, 3.0],
+                        [6030, 192, 6.1, 515, 548, 487, 3.0], # Thrust here seems off
                         [6040, 165, 4.8, 558, 470, 540, 4.5],
                         [6030, 130, 3.5, 373, 385, 574, 8.3],
                         [6040, 115, 3.0, 414, 435, 604, 10.1]])
@@ -96,15 +96,6 @@ T = Tmeas / (1 + (gamma - 1) / 2 * M**2)
 Vt = M * a
 Ve = Vt * np.sqrt(rho / rho0)
 
-# Constant values concerning aircraft inertia
-
-muc    = m / (rho * S * c)
-mub    = m / (rho * S * b)
-KX2    = 0.019
-KZ2    = 0.042
-KXZ    = 0.002
-KY2    = 1.25 * 1.114
-
 # Lift coefficient
 CL = 2 * W / (rho * Vt ** 2 * S)              # Lift coefficient [ ]
 
@@ -115,6 +106,7 @@ linregress_x = np.array([min(alpha_deg), max(alpha_deg)])
 linregress_y = intercept + CLa * linregress_x
 
 CLalabel = 'CLa = '+str(CLa)
+print(CLalabel)
 
 plt.plot(linregress_x, linregress_y, label = CLalabel)
 plt.scatter(alpha_deg, CL)
@@ -162,9 +154,11 @@ linregress_y = CD0 + slope * linregress_x
 
 oswald = 1 / (pi * A * slope)
 
-CDlabel = 'CD0 = '+str(CD0)+', e = '+str(oswald)
+CClabel = 'CD0 = '+str(CD0)+', e = '+str(oswald)
 
-plt.plot(linregress_x, linregress_y, label=CDlabel)
+print(CClabel)
+
+plt.plot(linregress_x, linregress_y, label=CClabel)
 plt.scatter(CL_sq, CD)
 plt.ylabel('CD [-]')
 plt.xlabel('CL^2 [-]')
@@ -193,9 +187,10 @@ CDa, intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_deg,
 linregress_x = np.array([min(alpha_deg), max(alpha_deg)])
 linregress_y = intercept + CDa * linregress_x
 
-CLalabel = 'CDa = '+str(CLa)
+CDalabel = 'CDa = '+str(CDa)
+print(CDalabel)
 
-plt.plot(linregress_x, linregress_y, label = CLalabel)
+plt.plot(linregress_x, linregress_y, label = CDalabel)
 plt.scatter(alpha_deg, CD)
 plt.ylabel('CD [-]')
 plt.xlabel('alpha [deg]')
