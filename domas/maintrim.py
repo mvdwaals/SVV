@@ -15,6 +15,7 @@ hp_ft = data_not_si_T[0]
 Vc_kts = data_not_si_T[1]
 alpha_deg = data_not_si_T[2]
 deltae_deg = data_not_si_T[3]
+Fe = data_not_si_T[6]
 mfu_lb = data_not_si_T[8]
 Tmta_c = data_not_si_T[9]
 
@@ -47,5 +48,9 @@ ddeltae_dalpha, uu_intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregr
 Cmdelta = - CN * Deltaxcg / Deltadeltae_rad / c
 Cmalpha = - ddeltae_dalpha * Cmdelta
 
-Ttotal = fTtotal(n_test, hp, M, FFl, FFr)
-Ts = fTtotal(1, [0], 
+Ttotal = fTtotal(T,n_test, hp, M, FFl, FFr)
+Ts = fTtotal([T0], 1, [0], [0], mdotfs, mdotfs)
+Tcs = Ts * 2 / (rho * Vt**2 * S)
+Tc = Ttotal * 2 / (rho * Vt**2 * S)
+deltastareeq = delatee_rad - CmTc * (Tcs - Tc) / Cmdelta
+Fstareaer = Fe * Ws / W
