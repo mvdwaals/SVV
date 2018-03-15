@@ -13,6 +13,8 @@ data_not_si_T = data_not_si.T
 
 hp_ft = data_not_si_T[0]
 Vc_kts = data_not_si_T[1]
+alpha_deg = data_not_si_T[2]
+deltae_deg = data_not_si_T[3]
 mfu_lb = data_not_si_T[8]
 Tmta_c = data_not_si_T[9]
 
@@ -22,6 +24,8 @@ m_tot = sum(person_weight) + empty_weight + fuel_weight
 
 hp = hp_ft * ft_m
 Vc = Vc_kts * kts_ms
+alpha_rad = np.radians(alpha_deg)
+deltae_rad = np.radians(deltae_rad)
 m = m_tot - mfu_lb * lb_kg
 Tmta = Tmta_c + c_k
 
@@ -37,6 +41,11 @@ Ve = fVe(Vt, rho)
 Vetilde = fVetilde(Ve, Ws, W) #W
 
 CN = 2 * W / (rho * Vt**2 * S)
+
+Deltaxcg = fDeltaxcg()
+ddeltae_dalpha, uu_intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_rad,CL) # Lots of unused (uu_) values
+Cmdelta = - CN * Deltaxcg / Deltadeltae_rad / c
+Cmalpha = - ddeltae_dalpha * Cmdelta
 
 Ttotal = fTtotal(n_test, hp, M, FFl, FFr)
 Ts = fTtotal(1, [0], 

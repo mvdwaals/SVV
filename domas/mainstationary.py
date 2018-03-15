@@ -9,9 +9,22 @@ from dataweight import *
 from funcv import *
 from functhrust import *
 
-n_test = len(data_not_si)
-data_not_si_T = data_not_si.T
+'''
+data_not_si = np.genfromtxt('dataflat.txt')
+data_not_si_T = data_not_si
+hp_ft = data_not_si_T[3]
+Vc_kts = data_not_si_T[6]
+Tmta_c = data_not_si_T[5]
+FFl_lbhr = data_not_si_T[1]
+FFr_lbhr = data_not_si_T[2]
+mfu_lb = data_not_si_T[4]
+alpha_deg = data_not_si_T[0]
+n_test = len(hp_ft)
 
+'''
+#data_not_si = np.concatenate((data_not_si, trim_not_si))
+data_not_si_T = data_not_si.T
+n_test = len(data_not_si)
 hp_ft = data_not_si_T[0]
 Vc_kts = data_not_si_T[1]
 Tmta_c = data_not_si_T[2]
@@ -19,12 +32,13 @@ FFl_lbhr = data_not_si_T[3]
 FFr_lbhr = data_not_si_T[4]
 mfu_lb = data_not_si_T[5]
 alpha_deg = data_not_si_T[6]
-alpha_rad = np.radians(alpha_deg)
+''
 
 empty_weight = empty_weight_lb * lb_kg
 fuel_weight = fuel_weight_lb * lb_kg
 m_tot = sum(person_weight) + empty_weight + fuel_weight
 
+alpha_rad = np.radians(alpha_deg)
 hp = hp_ft * ft_m
 Vc = Vc_kts * kts_ms
 m = m_tot - mfu_lb * lb_kg
@@ -46,12 +60,12 @@ rho = frho(p, T)
 CL = 2 * W / (rho * Vt**2 * S)              # Lift coefficient [ ]
 
 #Plotting and finding CLa
-CLa, intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_rad,CL) # Lots of unused (uu_) values
+CLa, intercept, r_value, uu_p_value, uu_std_err = stats.linregress(alpha_rad,CL) # Lots of unused (uu_) values
 
 linregress_x = np.array([min(alpha_rad), max(alpha_rad)])
 linregress_y = intercept + CLa * linregress_x
 
-CLalabel = 'CLa = '+str(round(CLa,3))+' [5.084]'
+CLalabel = 'CLa = '+str(round(CLa,3))+' [5.084], r = '+str(round(r_value,3))
 print(CLalabel)
 
 plt.plot(linregress_x, linregress_y, label = CLalabel)
@@ -70,14 +84,14 @@ CD = 2 * Ttotal / (rho * Vt**2 * S)
 CL_sq = CL**2
 
 #Plotting CLsq-CD, find e and CD0
-slope, CD0, uu_r_value, uu_p_value, uu_std_err = stats.linregress(CL_sq,CD) # Lots of unused (uu_) values
+slope, CD0, r_value, uu_p_value, uu_std_err = stats.linregress(CL_sq,CD) # Lots of unused (uu_) values
 
 linregress_x = np.array([min(CL_sq), max(CL_sq)])
 linregress_y = CD0 + slope * linregress_x
 
 oswald = 1 / (pi * A * slope)
 
-CClabel = 'CD0 = '+str(round(CD0,3))+' [0.04], e = '+str(round(oswald,3))+'[0.8]'
+CClabel = 'CD0 = '+str(round(CD0,3))+' [0.04], e = '+str(round(oswald,3))+' [0.8], r = '+str(round(r_value,3))
 
 print(CClabel)
 
@@ -91,26 +105,20 @@ plt.cla()
 plt.clf()
 
 #Plotting CL-CD
-#p = np.polyfit(CD,CL,2)
-#x = np.linspace(min(CL),max(CL),50)
-#y = p[0]*x**2 + p[1]*x + p[2]
-
-#plt.plot(x,y)
-plt.plot(CD, CL, 's-')
+plt.scatter(CL, CD)
 plt.ylabel('CD [-]')
 plt.xlabel('CL [-]')
 plt.savefig('graphclcd.png')
 plt.cla()
 plt.clf()
 
-
 #Plotting CD-a
-CDa, intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_rad,CD) # Lots of unused (uu_) values
+CDa, intercept, r_value, uu_p_value, uu_std_err = stats.linregress(alpha_rad,CD) # Lots of unused (uu_) values
 
 linregress_x = np.array([min(alpha_rad), max(alpha_rad)])
 linregress_y = intercept + CDa * linregress_x
 
-CDalabel = 'CDa = '+str(round(CDa,3))
+CDalabel = 'CDa = '+str(round(CDa,3))+', r = '+str(round(r_value,3))
 print(CDalabel)
 
 plt.plot(linregress_x, linregress_y, label = CDalabel)
