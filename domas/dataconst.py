@@ -13,6 +13,7 @@ lbhr_kgs = 0.000125998
 lb_kg = 0.453592
 in_m = 0.0254
 mdotfs = 0.048 #kg/s
+CmTc = -0.0064
 
 # Aircraft geometry
 S      = 30.00	          # wing area [m^2]
