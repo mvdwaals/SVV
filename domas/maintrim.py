@@ -43,8 +43,9 @@ Vetilde = fVetilde(Ve, Ws, W) #W
 CN = 2 * W / (rho * Vt**2 * S)
 
 Deltaxcg = fDeltaxcg()
-
+ddeltae_dalpha, uu_intercept, uu_r_value, uu_p_value, uu_std_err = stats.linregress(alpha_rad,CL) # Lots of unused (uu_) values
 Cmdelta = - CN * Deltaxcg / Deltadeltae_rad / c
+Cmalpha = - ddeltae_dalpha * Cmdelta
 
 Ttotal = fTtotal(n_test, hp, M, FFl, FFr)
 Ts = fTtotal(1, [0], 

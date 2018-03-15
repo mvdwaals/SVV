@@ -9,9 +9,22 @@ from dataweight import *
 from funcv import *
 from functhrust import *
 
-n_test = len(data_not_si)
-data_not_si_T = data_not_si.T
+'''
+data_not_si = np.genfromtxt('dataflat.txt')
+data_not_si_T = data_not_si
+hp_ft = data_not_si_T[3]
+Vc_kts = data_not_si_T[6]
+Tmta_c = data_not_si_T[5]
+FFl_lbhr = data_not_si_T[1]
+FFr_lbhr = data_not_si_T[2]
+mfu_lb = data_not_si_T[4]
+alpha_deg = data_not_si_T[0]
+n_test = len(hp_ft)
 
+'''
+#data_not_si = np.concatenate((data_not_si, trim_not_si))
+data_not_si_T = data_not_si.T
+n_test = len(data_not_si)
 hp_ft = data_not_si_T[0]
 Vc_kts = data_not_si_T[1]
 Tmta_c = data_not_si_T[2]
@@ -19,12 +32,13 @@ FFl_lbhr = data_not_si_T[3]
 FFr_lbhr = data_not_si_T[4]
 mfu_lb = data_not_si_T[5]
 alpha_deg = data_not_si_T[6]
-alpha_rad = np.radians(alpha_deg)
+''
 
 empty_weight = empty_weight_lb * lb_kg
 fuel_weight = fuel_weight_lb * lb_kg
 m_tot = sum(person_weight) + empty_weight + fuel_weight
 
+alpha_rad = np.radians(alpha_deg)
 hp = hp_ft * ft_m
 Vc = Vc_kts * kts_ms
 m = m_tot - mfu_lb * lb_kg
@@ -77,7 +91,7 @@ linregress_y = CD0 + slope * linregress_x
 
 oswald = 1 / (pi * A * slope)
 
-CClabel = 'CD0 = '+str(round(CD0,3))+' [0.04], e = '+str(round(oswald,3))+'[0.8], r = '+str(round(r_value,3))
+CClabel = 'CD0 = '+str(round(CD0,3))+' [0.04], e = '+str(round(oswald,3))+' [0.8], r = '+str(round(r_value,3))
 
 print(CClabel)
 
