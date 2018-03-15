@@ -4,22 +4,22 @@
 
 % Stationary flight condition
 
-%hp0    = ;      	  % pressure altitude in the stationary flight condition [m]
-%V0     = ;            % true airspeed in the stationary flight condition [m/sec]
-%alpha0 = ;       	  % angle of attack in the stationary flight condition [rad]
-%th0    = ;       	  % pitch angle in the stationary flight condition [rad]
+hp0    = ;      	  % pressure altitude in the stationary flight condition [m]
+V0     = ;            % true airspeed in the stationary flight condition [m/sec]
+alpha0 = ;       	  % angle of attack in the stationary flight condition [rad]
+th0    = ;       	  % pitch angle in the stationary flight condition [rad]
 
 % Aircraft mass
-%m      = ;         	  % mass [kg]
+m      = ;         	  % mass [kg]
 
 % aerodynamic properties
-%e      = ;            % Oswald factor [ ]
-%CD0    = ;            % Zero lift drag coefficient [ ]
-%CLa    = ;            % Slope of CL-alpha curve [ ]
+e      = ;            % Oswald factor [ ]
+CD0    = ;            % Zero lift drag coefficient [ ]
+CLa    = ;            % Slope of CL-alpha curve [ ]
 
 % Longitudinal stability
-%Cma    = ;            % longitudinal stabilty [ ]
-%Cmde   = ;            % elevator effectiveness [ ]
+Cma    = ;            % longitudinal stabilty [ ]
+Cmde   = ;            % elevator effectiveness [ ]
 
 % Aircraft geometry
 
@@ -44,8 +44,8 @@ Temp0  = 288.15;          % temperature at sea level in ISA [K]
 R      = 287.05;          % specific gas constant [m^2/sec^2K]
 g      = 9.81;            % [m/sec^2] (gravity constant)
 
-%rho    = rho0*((1+(lambda*hp0/Temp0)))^(-((g/(lambda*R))+1));   % [kg/m^3]  (air density)
-%W      = m*g;				                        % [N]       (aircraft weight)
+rho    = rho0*((1+(lambda*hp0/Temp0)))^(-((g/(lambda*R))+1));   % [kg/m^3]  (air density)
+W      = m*g;				                        % [N]       (aircraft weight)
 
 % Constant values concerning aircraft inertia
 
@@ -59,25 +59,25 @@ KY2    = 1.25*1.114;
 % Aerodynamic constants
 
 Cmac   = 0;                     % Moment coefficient about the aerodynamic centre [ ]
-%CNwa   = CLa;   		        % Wing normal force slope [ ]
+CNwa   = CLa;   		        % Wing normal force slope [ ]
 CNha   = 2*pi*Ah/(Ah+2);        % Stabiliser normal force slope [ ]
 depsda = 4/(A+2);               % Downwash gradient [ ]
 
 % Lift and drag coefficient
 
-%CL = 2*W/(rho*V0^2*S);               % Lift coefficient [ ]
-%CD = CD0 + (CLa*alpha0)^2/(pi*A*e);  % Drag coefficient [ ]
+CL = 2*W/(rho*V0^2*S);               % Lift coefficient [ ]
+CD = CD0 + (CLa*alpha0)^2/(pi*A*e);  % Drag coefficient [ ]
 
 % Stabiblity derivatives
 
-%CX0    = W*sin(th0)/(0.5*rho*V0^2*S);
+CX0    = W*sin(th0)/(0.5*rho*V0^2*S);
 CXu    = -0.02792;
 CXa    = -0.47966;
 CXadot = +0.08330;
 CXq    = -0.28170;
 CXde   = -0.03728;
 
-%CZ0    = -W*cos(th0)/(0.5*rho*V0^2*S);
+CZ0    = -W*cos(th0)/(0.5*rho*V0^2*S);
 CZu    = -0.37616;
 CZa    = -5.74340;
 CZadot = -0.00350;
