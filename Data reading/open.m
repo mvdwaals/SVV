@@ -1,4 +1,4 @@
-vaneAOA = flightdata.vane_AOA.data;
+alpha = flightdata.vane_AOA.data;
 t = flightdata.time.data;
 dte = flightdata.elevator_dte.data;
 Fe = flightdata.column_fe.data;
@@ -30,6 +30,7 @@ Vtas = flightdata.Dadc1_tas.data;
 hrate = flightdata.Dadc1_altRate.data;
 measure = flightdata.measurement_running.data;
 
+%measuremtns: 1060 - 1900
 %short period: 3200 - 3250
 %phugoid: 3250 - 3500
 %aperiodic roll: 3550 - 3600
@@ -37,4 +38,19 @@ measure = flightdata.measurement_running.data;
 %Dutch roll with damper: 3725 - 3745
 %spiral: 3890 - 4050
 
-plot(t,roll)
+tx = t(10511:18911); %unit?
+hx = h(10511:18911); % ft
+Vcasx = Vcas(10511:18911); % kts
+tatx = tat(10511:18911); % deg Celsius
+FFlx = FFl(10511:18911); % lbs/hr
+FFrx = FFr(10511:18911); % lbs/hr
+fuelusedlx = fuelusedl(10511:18911); % lbs
+fuelusedrx = fuelusedr(10511:18911); % lbs
+alphax = alpha(10511:18911); % deg
+
+
+
+
+
+
+
