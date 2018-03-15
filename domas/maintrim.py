@@ -35,3 +35,8 @@ Vt = fVt(M, a)
 rho = frho(p, T)
 Ve = fVe(Vt, rho)
 Vetilde = fVetilde(Ve, Ws, W) #W
+
+CN = 2 * W / (rho * Vt**2 * S)
+
+Ttotal = fTtotal(n_test, hp, M, FFl, FFr)
+Ts = fTtotal(1, [0], 
