@@ -1,6 +1,6 @@
 import numpy as np
-#   0       1       2       3       4       5       6           7           8       9
-# hp[ft] IAS[kts] a[deg] de[deg] detr[deg] Fe[N] FFl[lb/hr] FFr[lb/hr] mfu[lb] TAT[C]
+#   0       1       2         3       4         5       6           7           8       9
+# hp[ft] Vc[kts] alpha[deg] deltae[deg] deltaetr[deg] Fe[N] FFl[lb/hr] FFr[lb/hr] mfu[lb] Tmta[C]
 data_not_si = np.array([
 [7540,	160,	4.8,	0.2,	3.1,	0,	417,	456,	686,	2.0],
 [7750,	150,	5.5,	-0.2,	3.1,	-18,	415,	454,	734,	1.2],
@@ -13,4 +13,4 @@ data_not_si = np.array([
 
 myk_not_si = np.array([[6860,	160,	4.7,	-0.2,	3.1,	-25,	430,	470,	920,	3.0]]) # After Delta CG
 
-Deltadeltae_deg = data_not_si[7][3] - myk_not_si[0][3]
+Deltadeltae_rad = np.radians(data_not_si[7][3] - myk_not_si[0][3])
