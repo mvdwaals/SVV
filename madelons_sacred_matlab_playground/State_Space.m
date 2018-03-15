@@ -14,5 +14,5 @@ C2_sym = [C_X_u     C_X_alpha   C_Z_0       C_X_q*cbar/V;...
             0       0               0       cbar/V;...
             C_m_u   C_m_alpha   0   C_m_q*cbar/V];
         
-A= inv(C1_sym)*C2_sym
+A= inv(C1_sym)*C2_sym;
             
