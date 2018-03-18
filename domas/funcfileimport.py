@@ -4,7 +4,7 @@ from dataconst import *
 def times():
     results = []
     times = []
-    f = open('time.txt',"r")
+    f = open('datatime.txt',"r")
     for line in f:
         results.append(line.split())
 
@@ -17,7 +17,7 @@ def times():
 def fuelusedleft():
     results = []
     fuelusedleft = []
-    g = open('Fuelusedleft.txt',"r")
+    g = open('datafuelleft.txt',"r")
     for line in g:
         results.append(line.split())
 
@@ -29,7 +29,7 @@ def fuelusedleft():
 def fuelusedright():
     results = []
     fuelusedright = []
-    h= open('Fuelusedright.txt',"r")
+    h= open('datafuelright.txt',"r")
     for line in h:
         results.append(line.split())
 
