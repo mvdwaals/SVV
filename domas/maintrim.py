@@ -77,14 +77,14 @@ arr = np.array([Vetilde, deltastareeq, Fstareaer]).T
 arr = arr[arr[:,0].argsort()]
 arr = arr.T
 
-plt.plot(arr[0], arr[1], 's-')
+plt.plot(arr[0], arr[1], 'o-')
 plt.xlabel('Ṽ_e [m/s]')
 plt.ylabel('delta*_eq [rad]')
 plt.savefig('graphdeltastar.png')
 plt.cla()
 plt.clf()
 
-plt.plot(arr[0], arr[2], 's-')
+plt.plot(arr[0], arr[2], 'o-')
 plt.xlabel('Ṽ_e [m/s]')
 plt.ylabel('F*_eq [N]')
 plt.savefig('graphfstar.png')
