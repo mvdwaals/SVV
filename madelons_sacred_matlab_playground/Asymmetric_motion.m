@@ -2,24 +2,26 @@
 
 % xcg = 0.25*c
 
+%Aperiodic Roll from 3540s - Spiral from 3840s
+
 % Stationary flight condition
 
-hp0    = ;      	  % pressure altitude in the stationary flight condition [m]
-V0     = ;            % true airspeed in the stationary flight condition [m/sec]
-alpha0 = ;       	  % angle of attack in the stationary flight condition [rad]
-th0    = ;       	  % pitch angle in the stationary flight condition [rad]
+hp0    = convlength(flightdata.Dadc1_alt.data(t),'ft','m');      	  % pressure altitude in the stationary flight condition [m]
+V0     = convvel(flightdata.Dadc1_tas.data(t),'kts','m/s');            % true airspeed in the stationary flight condition [m/sec]
+alpha0 = convang(flightdata.vane_AOA.data(t),'deg','rad');       	  % angle of attack in the stationary flight condition [rad]
+th0    = 0;       	  % pitch angle in the stationary flight condition [rad]
 
 % Aircraft mass
-m      = ;         	  % mass [kg]
+m      = 6040;         	  % mass [kg]
 
 % aerodynamic properties
-e      = ;            % Oswald factor [ ]
-CD0    = ;            % Zero lift drag coefficient [ ]
-CLa    = ;            % Slope of CL-alpha curve [ ]
+e      = 0.8;            % Oswald factor [ ]
+CD0    = 0.022;            % Zero lift drag coefficient [ ]
+CLa    = 5.084;            % Slope of CL-alpha curve [ ]
 
 % Longitudinal stability
-Cma    = ;            % longitudinal stabilty [ ]
-Cmde   = ;            % elevator effectiveness [ ]
+%Cma    = ;            % longitudinal stabilty [ ]
+%Cmde   = ;            % elevator effectiveness [ ]
 
 % Aircraft geometry
 
