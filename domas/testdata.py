@@ -4,16 +4,24 @@ import matplotlib.pyplot as plt
 n = 50
 
 a = np.genfromtxt('datamatlab.txt')
-plt.plot(a[3])
-plt.plot(a[6]+5700)
+
+b = np.gradient(a[0])
+c = np.gradient(a[3])
+d = np.gradient(a[6])
+
+#plt.plot(a[0])
+plt.plot(np.sqrt(c**2 + d**2) < 0.1)
+
+#for i in [ 1.3,  2. ,  3. ,  4.5,  8.3, 10.1]:
+#    plt.axhline(i)
 
 t = a.T
 
-i = [0,860,
+i = [700,860,
      1780,2040,
-     3250,3330,
-     3770,3860,
-     5460,5550,
+     3030,3200,
+     5460,5500,
+     7140,7340,
      7860,7980]
 
 for j in i:
