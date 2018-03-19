@@ -17,12 +17,8 @@ m_start = m_OEW + m_people + m_extra_payload + m_fuel_start;
 fuelusedl_kg = convmass (fuelusedl,'lbm', 'kg');
 fuelusedr_kg = convmass (fuelusedr, 'lbm', 'kg');
 
-ac_mass_lst=[];
+ac_mass_lst = m_start - fuelusedl_kg - fuelusedr_kg;
 
-for i =1:length(t)
-    
-    ac_mass_lst(end+1) = m_start - fuelusedl_kg(i) - fuelusedr_kg(i);
-end
 %% SYMMETRIC MOTION STATE SPACE INPUTS
 
 
@@ -34,7 +30,7 @@ alpha0 = alpha(3200 * 10) * pi/180;       	  % angle of attack in the stationary
 th0    = pitch(3200 * 10) * pi/180;       	  % pitch angle in the stationary flight condition [rad]
 
 % Aircraft mass
-m      = 5500;         	  % mass [kg]
+m      = ac_mass_lst(3200 * 10);         	  % mass [kg]
 
 % aerodynamic properties
 e      = 0.865;            % Oswald factor [ ]
@@ -160,13 +156,12 @@ D = [ 0 ; 0 ; 0 ; 0 ; 1];
 %% Create a state space model
 
 sys = ss(A,B,C,D);
-time = 0:0.1:60;
-u = zeros(size(time));
-u(1:10) = delta_e(3200 * 10) * pi/180; 
+time = 3190*10:1:3500*10;
+input = delta_e(3190*10:3500*10);
 
-response = lsim(sys,u,time);
+response = lsim(sys,input,time);
 
 %load('/Users/Mykolas/Documents/GitHub/SVV/Data reading/open.m')
-%plot (time, 180/pi*response(:,3),t(0:0.1:310), pitch(3190*10:3500*10) )% t(0:0.1:310), pitch(3190*10:3500*10)) % pitch angle response
+%plot (time, response(:,3))%t(0:0.1:310), pitch(3190*10:3500*10) )% t(0:0.1:310), pitch(3190*10:3500*10)) % pitch angle response
 %plot ( t(0:0.1:310), pitch(3190*10:3500*10))
-
+plot(t(3190*10:3500*10),delta_e(3190*10:3500*10),t(3190*10:3500*10),pitch(3190*10:3500*10))
