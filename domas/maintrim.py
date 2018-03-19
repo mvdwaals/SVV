@@ -13,6 +13,7 @@ from functhrust import *
 def avg(lst): return sum(lst)/len(lst)
 
 n_r = 3
+n_ign = 2
 
 data_not_si = myk_not_si
 n_tests = len(data_not_si)
@@ -50,7 +51,7 @@ a = fa(T)
 Vt = fVt(M, a)
 rho = frho(p, T)
 Ve = fVe(Vt, rho)
-Vetilde = (fVetilde(Ve, Ws, W))[:-1] #Ignore the last measurement (after deltacg)
+Vetilde = (fVetilde(Ve, Ws, W))[:-n_ign] #Ignore the last measurement (after deltacg)
 
 CN = 2 * W / (rho * Vt**2 * S)
 CN = CN[-2::] #Assumption!!!
@@ -64,14 +65,14 @@ Cmdelta = avg(Cmdelta)
 Cmalpha = -ddeltae_dalpha * Cmdelta
 #print(Cmalpha)
 
-print('Cmdelta = '+str(round(Cmdelta,n_r))+', Cmalpha = '+str(round(Cmalpha,n_r))+' with r = '+str(round(r_value,n_r)))
+print('Cmdelta = '+str(round(Cmdelta,n_r))+', Cmalpha = '+str(round(Cmalpha,n_r))+' with r^2 = '+str(round(r_value**2,n_r)))
 
 Ttotal = fTtotal(T,n_tests, hp, M, FFl, FFr)
 Ts = fTtotal([T0], 1, [0], [0], [mdotfs], [mdotfs]) #Needs checking
 Tcs = Ts * 2 / (rho * Vt**2 * S)
 Tc = Ttotal * 2 / (rho * Vt**2 * S)
-deltastareeq = (deltae_rad - CmTc * (Tcs - Tc) / Cmdelta)[:-1] #Ignore the last measurement (after deltacg)
-Fstareaer = (Fe * Ws / W)[:-1] #Ignore the last measurement (after deltacg)
+deltastareeq = (deltae_rad - CmTc * (Tcs - Tc) / Cmdelta)[:-n_ign] #Ignore the last measurement (after deltacg)
+Fstareaer = (Fe * Ws / W)[:-n_ign] #Ignore the last measurement (after deltacg)
 
 arr = np.array([Vetilde, deltastareeq, Fstareaer]).T
 arr = arr[arr[:,0].argsort()]

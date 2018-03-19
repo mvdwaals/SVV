@@ -4,33 +4,38 @@ import matplotlib.pyplot as plt
 n = 50
 
 a = np.genfromtxt('datamatlab.txt')
-plt.plot(a[6])
-plt.show()
+plt.plot(a[3])
+plt.plot(a[6]+5700)
+
 t = a.T
 
-t1 = t[0:860]
-t2 = t[1780:2040]
-t3 = t[2800:2940]
-t4 = t[3800:4040]
-t5 = t[5280:5380]
-t6 = t[7750:8300]
+i = [0,860,
+     1780,2040,
+     3250,3330,
+     3770,3860,
+     5460,5550,
+     7860,7980]
 
-'''
-t1 = t1[0::int(170/n)+1]
-t2 = t2[0::int(152/n)+1]
-t3 = t3[0::int(128/n)+1]
-t4 = t4[0::int(148/n)+1]
-t5 = t5[0::int(120/n)+1]
-t6 = t6[0::int(1110/n)+1]
-'''
+for j in i:
+    plt.axvline(j)
+plt.show()
 
+# From velocity plot, read flat
+t1 = t[i[0]:i[1]]
+t2 = t[i[2]:i[3]]
+t3 = t[i[4]:i[5]]
+t4 = t[i[6]:i[7]]
+t5 = t[i[8]:i[9]]
+t6 = t[i[10]:i[11]]
 
 
 y = np.concatenate((t1, t2, t3, t4, t5, t6))
+#y = t # Uncomment this and run to use all matlab data (not recommended)
 print(len(y))
 a = y.T
 
 np.savetxt('dataflat.txt',a)
+print('Written to file.')
 
 # 0         1           2       3       4       5           6       
 #alpha[deg] FFl[lbhr] FFr[lbhr] hp[ft] mfu[lb] Tmta[c] Vc[kts] 
