@@ -100,3 +100,6 @@ ENV/
 # mypy
 .mypy_cache/
 .DS_Store
+Data reading/open.m
+Data reading/open.m
+state_space_matlab/ac_mass.m
