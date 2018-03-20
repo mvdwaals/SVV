@@ -24,4 +24,4 @@ myk_not_si = np.array([[7540,	160,	4.8,	0.2,	3.1,	0,	417,	456,	686,	2.0], #0
                        [6800,	160,	4.6,	0.2,	3.1,	0,	430,	470,	897,	3.0], # Before Delta CG
                        [6860,	160,	4.7,	-0.2,	3.1,	-25,	430,	470,	920,	3.0]]) # After Delta CG
 
-Deltadeltae_rad = np.radians(myk_not_si[-2][3] - myk_not_si[-1][3])
+Deltadeltae_rad = np.radians(np.abs(myk_not_si[-2][3] - myk_not_si[-1][3]))

@@ -4,7 +4,7 @@ import numpy as np
 
 def fTtotal(T, n_tests, hp, M, FFl, FFr):
     TISA = T0 + labda * np.array(hp)
-    DeltaT = T - TISA
+    DeltaT = TISA - T
     f = open('matlab.dat','w')
     for i in range(n_tests):
         str1 = str(hp[i])+'\t'
