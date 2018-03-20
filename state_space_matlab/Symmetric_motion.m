@@ -1,5 +1,5 @@
 % Citation 550 - Linear simulation
-
+clear all;
 load('flighttestdata.mat');
 open_data;
 
@@ -136,10 +136,10 @@ C1_sym = [  -2*muc*c/V0^2        0                               0              
             0                       Cmadot*c/V0             0               -2*muc*KY2*c^2/V0^2];
         
         
-C2_sym = [CXu     CXa   CZ0       CXq*c/V0;...
-            CZu   CZa    -CX0  (CZq+2*muc)*c/V0; ...
+C2_sym = [CXu/V0     CXa   CZ0       CXq*c/V0;...
+            CZu/V0   CZa    -CX0  (CZq+2*muc)*c/V0; ...
             0       0               0       c/V0;...
-            Cmu   Cma   0   Cmq*c/V0];
+            Cmu/V0   Cma   0   Cmq*c/V0];
         
 C3_sym = [CXde ; CZde ; 0 ; Cmde ];
 
@@ -150,18 +150,26 @@ B = -inv(C1_sym) * C3_sym;
 
 % C, D matrices for symmetric motion 
 
-C = eye(5,4);
-D = [ 0 ; 0 ; 0 ; 0 ; 1];
-
+C = eye(4,4);
+D = zeros(4,1);
 %% Create a state space model
 
 sys = ss(A,B,C,D);
-time = 3190*10:1:3500*10;
-input = delta_e(3190*10:3500*10);
+t_init = 31900;
+t_end = 35000;
+time = t(t_init:t_end);
+input = delta_e(t_init:t_end)'-delta_e(t_init);
 
 response = lsim(sys,input,time);
+
+figure(2233);
 
 %load('/Users/Mykolas/Documents/GitHub/SVV/Data reading/open.m')
 %plot (time, response(:,3))%t(0:0.1:310), pitch(3190*10:3500*10) )% t(0:0.1:310), pitch(3190*10:3500*10)) % pitch angle response
 %plot ( t(0:0.1:310), pitch(3190*10:3500*10))
-plot(t(3190*10:3500*10),delta_e(3190*10:3500*10),t(3190*10:3500*10),pitch(3190*10:3500*10))
+%plot(t(3190*10:3500*10),delta_e(3190*10:3500*10),t(3190*10:3500*10),pitch(3190*10:3500*10))
+subplot(1,2,1);
+plot(time,response(:,3)+pitch(t_init),'Color','b'); hold on;
+plot(time,pitch(t_init:t_end),'Color','g');
+subplot(1,2,2);
+plot(time,input);

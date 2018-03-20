@@ -15,9 +15,12 @@ dutch_roll_damped = struct('Name','Dutch Roll - Damped','t_init',37150,'t_end',3
 spiral_1 = struct('Name','Spiral (1st)','t_init',38250,'t_end',38850);
 
 %Initial time: Spiral - 2nd
-spiral_2 = struct('Name','Spiral (2nd)','t_init',38900,'t_end',39500);
+%spiral_2 = struct('Name','Spiral (2nd)','t_init',38900,'t_end',39500);
+spiral_2 = struct('Name','Spiral (2nd)','t_init',38800,'t_end',39500);
 
-maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_1, spiral_2, aper_roll];
+%maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_1, spiral_2, aper_roll];
+maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_2, aper_roll];
+%maneuvers = [dutch_roll_undamped];
 
 for maneuver = maneuvers
     t = maneuver.t_init;
@@ -32,8 +35,8 @@ V=V0;
 
 C1_asym = [(CYbdot-2*mub)*b/V    	0       0       0;...
             0                   -1/2*b/V	0	0;...
-            0                   0           -4*mub*KX2*b^2/(2*V^2)	-4*mub*KXZ*b^2/(2*V^2);...
-            Cnbdot*b/V          0           -4*mub*KXZ*b^2/(2*V^2)  -4*mub*KZ2*b^2/(2*V^2)];
+            0                   0           -4*mub*KX2*b^2/(2*V^2)	 4*mub*KXZ*b^2/(2*V^2);...
+            Cnbdot*b/V          0            4*mub*KXZ*b^2/(2*V^2)  -4*mub*KZ2*b^2/(2*V^2)];
         
 C2_asym = [CYb      CL          CYp*b/(2*V)        (CYr-4*mub)*b/(2*V);...
             0       0           b/(2*V)             0;...
@@ -54,26 +57,51 @@ C3_asym = [CYda  CYdr;...
  
 t = flightdata.time.data(t_init:t_end);
  
- u_input = [flightdata.delta_a.data(t_init:t_end)'-flightdata.delta_a.data(t_init);...
-            flightdata.delta_r.data(t_init:t_end)'-flightdata.delta_r.data(t_init)];
-     
- sys = ss(A,B,C,D);
+ u_input = [(flightdata.delta_a.data(t_init:t_end)'-flightdata.delta_a.data(t_init));...
+            -(flightdata.delta_r.data(t_init:t_end)'-flightdata.delta_r.data(t_init))];
 
+
+ sys = ss(A,B,C,D);
+ 
+ t= t-t(1);
+
+%  x0 = [0;
+%      deg2rad(flightdata.Ahrs1_Roll.data(t_init));
+%      flightdata.Ahrs1_bRollRate.data(t_init);
+%      flightdata.Ahrs1_bYawRate.data(t_init)];
 testttt = lsim(sys,u_input,t);
 
-t= t-t(1);
+
 
 figure();
-subplot(1,2,1);
-plot(t, testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init), t, flightdata.Ahrs1_bYawRate.data(t_init:t_end));
+subplot(2,2,1);
+plot(t, testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init), 'Color','g'); hold on;
+plot(t, flightdata.Ahrs1_bYawRate.data(t_init:t_end),'Color','b');
 title(['Yaw Rate over time - ', num2str(maneuver.Name)]);
 xlabel('Time');
-ylabel('Yaw rate (rad/s)');
+ylabel('Yaw rate (rad/s)')
 
-subplot(1,2,2);
-plot(t, testttt(:,3), t, flightdata.Ahrs1_bRollRate.data(t_init:t_end));
+subplot(2,2,2);
+plot(t, testttt(:,3), 'Color','g'); hold on;
+plot(t, flightdata.Ahrs1_bRollRate.data(t_init:t_end),'Color','b'); 
 title(['Roll Rate over time - ', num2str(maneuver.Name)]);
 xlabel('Time');
 ylabel('Roll rate (rad/s)');
+
+subplot(2,2,3);
+plot(t, testttt(:,2)+flightdata.Ahrs1_Roll.data(t_init), 'Color','g'); hold on;
+%plot(t, rad2deg(testttt(:,2)), 'Color','g'); hold on;
+plot(t, flightdata.Ahrs1_Roll.data(t_init:t_end),'Color','b');
+title(['Bank Angle over time - ', num2str(maneuver.Name)]);
+xlabel('Time');
+ylabel('Bank Angle [deg]')
+
+% subplot(2,2,4);
+% plot(t, testttt(:,3), 'Color','g');
+% plot(t, flightdata.Ahrs1_bRollRate.data(t_init:t_end),'Color','b'); hold on;
+% title(['Roll Rate over time - ', num2str(maneuver.Name)]);
+% xlabel('Time');
+% ylabel('Roll rate (rad/s)');
+
 
 end
