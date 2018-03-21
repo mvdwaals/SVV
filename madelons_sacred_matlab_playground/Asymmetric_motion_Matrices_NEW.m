@@ -79,14 +79,14 @@ plot(t, testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init), 'Color','g'); hold 
 plot(t, flightdata.Ahrs1_bYawRate.data(t_init:t_end),'Color','b');
 title(['Yaw Rate over time - ', num2str(maneuver.Name)]);
 xlabel('Time');
-ylabel('Yaw rate (rad/s)')
+ylabel('Yaw rate [rad/s]')
 
 subplot(2,2,2);
 plot(t, testttt(:,3), 'Color','g'); hold on;
 plot(t, flightdata.Ahrs1_bRollRate.data(t_init:t_end),'Color','b'); 
 title(['Roll Rate over time - ', num2str(maneuver.Name)]);
 xlabel('Time');
-ylabel('Roll rate (rad/s)');
+ylabel('Roll rate [rad/s]');
 
 subplot(2,2,3);
 plot(t, testttt(:,2)+flightdata.Ahrs1_Roll.data(t_init), 'Color','g'); hold on;
@@ -96,12 +96,6 @@ title(['Bank Angle over time - ', num2str(maneuver.Name)]);
 xlabel('Time');
 ylabel('Bank Angle [deg]')
 
-% subplot(2,2,4);
-% plot(t, testttt(:,3), 'Color','g');
-% plot(t, flightdata.Ahrs1_bRollRate.data(t_init:t_end),'Color','b'); hold on;
-% title(['Roll Rate over time - ', num2str(maneuver.Name)]);
-% xlabel('Time');
-% ylabel('Roll rate (rad/s)');
 
 
 end
