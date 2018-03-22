@@ -1,7 +1,12 @@
 % Citation 550 - Linear simulation
 clear all;
-load('flighttestdata.mat');
+load('Flighttestdata.mat');
 open_data;
+
+
+
+t_init = 31920; %s*10 for short period
+t_end = 32300; %s*10
 
 
 %% CALCULATING AIRCRAFT MASS AS A FUNCTION OF TIME
@@ -24,22 +29,22 @@ ac_mass_lst = m_start - fuelusedl_kg - fuelusedr_kg;
 
 % Stationary flight condition
 
-hp0    = h(3200 * 10) * 0.3048;      	  % pressure altitude in the stationary flight condition [m]
-V0     = Vtas(3200 * 10) * 0.514444;            % true airspeed in the stationary flight condition [m/sec]
-alpha0 = alpha(3200 * 10) * pi/180;       	  % angle of attack in the stationary flight condition [rad]
-th0    = pitch(3200 * 10) * pi/180;       	  % pitch angle in the stationary flight condition [rad]
+hp0    = h(t_init - 50) * 0.3048;      	  % pressure altitude in the stationary flight condition [m]
+V0     = Vtas(t_init - 50) * 0.514444;            % true airspeed in the stationary flight condition [m/sec]
+alpha0 = alpha(t_init - 50) * pi/180;       	  % angle of attack in the stationary flight condition [rad]
+th0    = pitch(t_init - 50) * pi/180;       	  % pitch angle in the stationary flight condition [rad]
 
 % Aircraft mass
-m      = ac_mass_lst(3200 * 10);         	  % mass [kg]
+m      = ac_mass_lst(t_init - 50);         	  % mass [kg]
 
 % aerodynamic properties
-e      = 0.865;            % Oswald factor [ ]
-CD0    = 0.022;            % Zero lift drag coefficient [ ]
-CLa    = 4.38;            % Slope of CL-alpha curve [ ]
+e      = 0.867;  %0.8          % Oswald factor [ ]
+CD0    = 0.022;   %0.04         % Zero lift drag coefficient [ ]
+CLa    = 4.392;   %5.084         % Slope of CL-alpha curve [ ]
 
 % Longitudinal stability
-Cma    = -0.5626;            % longitudinal stabilty [ ]
-Cmde   = -1.1642;            % elevator effectiveness [ ]
+Cma    = -0.843;  %-0.5626          % longitudinal stabilty [ ]
+Cmde   = -1.847;  %-1.1642          % elevator effectiveness [ ]
 
 % Aircraft geometry
 
@@ -99,9 +104,9 @@ CXde   = -0.03728;
 
 CZ0    = -W*cos(th0)/(0.5*rho*V0^2*S);
 CZu    = -0.37616;
-CZa    = -5.74340;
+CZa    = -5.74340; 
 CZadot = -0.00350;
-CZq    = -5.66290;
+CZq    = -5.66290; 
 CZde   = -0.69612;
 
 Cmu    = +0.06990;
@@ -150,26 +155,59 @@ B = -inv(C1_sym) * C3_sym;
 
 % C, D matrices for symmetric motion 
 
-C = eye(4,4);
-D = zeros(4,1);
+C = eye(5,4);
+D = [ 0 ; 0 ; 0 ; 0; 1 ];
+
 %% Create a state space model
 
 sys = ss(A,B,C,D);
-t_init = 31900;
-t_end = 35000;
-time = t(t_init:t_end);
-input = delta_e(t_init:t_end)'-delta_e(t_init);
+input = delta_e(t_init:t_end)-delta_e(t_init);
 
+time = t(t_init:t_end);
+time = time-time(1);
 response = lsim(sys,input,time);
 
-figure(2233);
+%%Plotting the pitch angle
+%yyaxis left
+%plot(time/10 , pitch(t_init:t_end) - pitch(t_init),'-' , 'Color','r'); hold on;
+%plot(time/10, response(:,3),'-' ,'Color','b'); hold on;
+%xlabel('Time [s]');
+%ylabel('Pitch Angle [deg]');
+%yyaxis right
+%plot(time/10 , delta_e(t_init:t_end), 'Color','k');
+%plot_title = (['Pitch angle over time']);
+%ylim([-4 4])
+%title(plot_title);
+%grid();
+%legend('flight data','model data','elevator deflection')
+%ylabel('Elevator angle [deg]');
 
-%load('/Users/Mykolas/Documents/GitHub/SVV/Data reading/open.m')
-%plot (time, response(:,3))%t(0:0.1:310), pitch(3190*10:3500*10) )% t(0:0.1:310), pitch(3190*10:3500*10)) % pitch angle response
-%plot ( t(0:0.1:310), pitch(3190*10:3500*10))
-%plot(t(3190*10:3500*10),delta_e(3190*10:3500*10),t(3190*10:3500*10),pitch(3190*10:3500*10))
-subplot(1,2,1);
-plot(time,response(:,3)+pitch(t_init),'Color','b'); hold on;
-plot(time,pitch(t_init:t_end),'Color','g');
-subplot(1,2,2);
-plot(time,input);
+%%Plotting the pitch rate
+yyaxis left
+plot(time/10 , pitchrate(t_init:t_end) - pitchrate(t_init),'-' , 'Color','r'); hold on;
+plot(time/10, response(:,4),'-' ,'Color','b'); hold on;
+xlabel('Time [s]');
+ylabel('Pitch Rate [deg/s]');
+yyaxis right
+plot(time/10 , delta_e(t_init:t_end), 'Color','k');
+plot_title = (['Pitch rate in the short period motion']);
+ylim([-4 4])
+title(plot_title);
+grid();
+legend('flight data','model data','elevator deflection')
+ylabel('Elevator angle [deg]');
+
+%%Plotting the angle of attack
+%plot(time , alpha(t_init:t_end)-alpha(t_init), time, response(:,2), time , delta_e(t_init:t_end))
+%legend('flight data','model data','elevator deflection')
+
+%%Plotting the horizontal velocity
+%plot(time , (Vtas(t_init:t_end)+Vtas(t_init)) , time, response(:,1), time , delta_e(t_init:t_end))
+%legend('flight data','model data','elevator deflection')
+
+% IN THE REPORT TALK ABOUT THE METHODS OF VERIFICATION WE USED TO COME TO
+% THE RIGHT ANSWER, WHICH ARE : SWITCHING EACH OTHERS THE WORK AND CHECKING
+% (I checked the C1,C2,C3 matrix derivation, Madelon fixed the output
+% plotting)
+
+
