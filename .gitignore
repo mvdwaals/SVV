@@ -103,3 +103,5 @@ ENV/
 Data reading/open.m
 Data reading/open.m
 state_space_matlab/ac_mass.m
+state_space_matlab/groupafterus.mat
+state_space_matlab/randgroupdata.mat
