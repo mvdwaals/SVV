@@ -196,6 +196,7 @@ title(plot_title);
 grid();
 legend('flight data','model data','elevator deflection')
 ylabel('Elevator angle [deg]');
+saveas(gcf,'jksad.png');
 
 %%Plotting the angle of attack
 %plot(time , alpha(t_init:t_end)-alpha(t_init), time, response(:,2), time , delta_e(t_init:t_end))
