@@ -1,7 +1,11 @@
 % Citation 550 - Linear simulation
 clear all;
+<<<<<<< HEAD
 load('Flighttestdata.mat');
 %load('Flighttestdata.mat');
+=======
+load('flighttestdata.mat');
+>>>>>>> df2f59f0a50cd2c4bb78d6d288a334b79c5a3a94
 open_data;
 
 
@@ -156,6 +160,7 @@ B = -inv(C1_sym) * C3_sym;
 
 % C, D matrices for symmetric motion 
 
+<<<<<<< HEAD
 C = eye(5,4);
 D = [ 0 ; 0 ; 0 ; 0; 1 ];
 
@@ -189,3 +194,28 @@ legend('flight data','model data','elevator deflection')
 % plotting)
 
 
+=======
+C = eye(4,4);
+D = zeros(4,1);
+%% Create a state space model
+
+sys = ss(A,B,C,D);
+t_init = 31900;
+t_end = 35000;
+time = t(t_init:t_end);
+input = delta_e(t_init:t_end)'-delta_e(t_init);
+
+response = lsim(sys,input,time);
+
+figure(2233);
+
+%load('/Users/Mykolas/Documents/GitHub/SVV/Data reading/open.m')
+%plot (time, response(:,3))%t(0:0.1:310), pitch(3190*10:3500*10) )% t(0:0.1:310), pitch(3190*10:3500*10)) % pitch angle response
+%plot ( t(0:0.1:310), pitch(3190*10:3500*10))
+%plot(t(3190*10:3500*10),delta_e(3190*10:3500*10),t(3190*10:3500*10),pitch(3190*10:3500*10))
+subplot(1,2,1);
+plot(time,response(:,3)+pitch(t_init),'Color','b'); hold on;
+plot(time,pitch(t_init:t_end),'Color','g');
+subplot(1,2,2);
+plot(time,input);
+>>>>>>> df2f59f0a50cd2c4bb78d6d288a334b79c5a3a94
