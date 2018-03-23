@@ -29,7 +29,6 @@ for maneuver = maneuvers
     t_init = maneuver.t_init;
     t_end = maneuver.t_end;
 
-%maneuver = struct(
 Asymmetric_motion;
 
 
@@ -65,14 +64,10 @@ t = flightdata.time.data(t_init:t_end);
  display_state = [flightdata.display_active_screen.data(t_init:t_end)';...
                     flightdata.display_graph_state.data(t_init:t_end)'];
 
- t= t-t(1);
+t= t-t(1);
  
- sys = ss(A,B,C,D);
+sys = ss(A,B,C,D);
  
-%  x0 = [0;
-%      deg2rad(flightdata.Ahrs1_Roll.data(t_init));
-%      flightdata.Ahrs1_bRollRate.data(t_init);
-%      flightdata.Ahrs1_bYawRate.data(t_init)];
 testttt = lsim(sys,u_input,t);
 
 figure();
@@ -147,18 +142,19 @@ yyaxis right;
 plot(t,u_input(maneuver.input,:),'Color','k');
 plot_title = (['Yaw Rate over time - ', num2str(maneuver.Name)]);
 ylabel('\delta [deg]');
-title(plot_title);
+%title(plot_title);
+legend('Simulated Data','Flight Data','Location','southeast');
 xlabel('Time [s]');
+hold off;
 
 subplot(1,2,2);
-plot(t, testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init), 'Color','b'); hold on;
+plot(t, testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init)-flightdata.Ahrs1_bYawRate.data(t_init:t_end), 'Color','b'); hold on;
 ylabel('\Delta Yaw rate [rad/s]');
-plot_title = (['\Delta Yaw Rate over time - ', num2str(maneuver.Name)]);
+plot_title = (['Delta Yaw Rate over time - ', num2str(maneuver.Name)]);
 ylabel('\delta [deg]');
-title(plot_title);
+%title(plot_title);
 xlabel('Time [s]');
 
-legend('Simulated Data','Flight Data','Location','southeast');
 grid on;
 saveas(gcf,[plot_title,'.png']);
 
