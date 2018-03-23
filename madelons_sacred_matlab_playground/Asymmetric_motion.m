@@ -24,7 +24,7 @@ CLa    = 4.392;            % Slope of CL-alpha curve [ ]
 %Cmde   = ;            % elevator effectiveness [ ]
 
 % Aircraft geometry
-
+ 
 S      = 30.00;	          % wing area [m^2]
 Sh     = 0.2*S;           % stabiliser area [m^2]
 Sh_S   = Sh/S;	          % [ ]

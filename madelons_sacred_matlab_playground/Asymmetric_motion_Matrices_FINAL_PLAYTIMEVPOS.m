@@ -25,7 +25,6 @@ spiral_2 = struct('Name','Spiral_2nd','t_init',38800,'t_end',39600,'input',2);
 maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_2, aper_roll];
 %maneuvers = [dutch_roll_undamped];
 
-PlotWidth = 8;
 
 for maneuver = maneuvers
     t = maneuver.t_init;
@@ -77,28 +76,30 @@ testttt = lsim(sys,u_input,t);
 filename = maneuver.Name;
 
 figure();
-fig = gcf;
 fig.PaperUnits = 'centimeters';
 fig.PaperPosition = [0 0 9 14];
 
-ax(1) = subplot(5,1,1);
+%left bottom width height
+ax(1) = subplot('Position',[0.1 0.82 0.8 0.16]);
 plot(t, deg2rad(testttt(:,3)+flightdata.Ahrs1_bRollRate.data(t_init)), 'Color','r'); hold on;
 plot(t, deg2rad(flightdata.Ahrs1_bRollRate.data(t_init:t_end)),'Color','b'); 
 %plot_title = ['Yaw Rate over time - ', num2str(maneuver.Name)];
 %title(plot_title);
-xlabel('Time [s]');
+%xlabel('Time [s]');
+grid on; 
+set(gca,'XTick',[]);
 ylabel('p [rad/s]');
-grid on;
+hold off;
 %legend('Simulated Data','Flight Data','Location','southeast'); hold off;
 
-ax(2) = subplot(5,1,2);
+ax(2) = subplot('Position',[0.1 0.66 0.8 0.16]);
 plot(t, abs(deg2rad(testttt(:,3)+flightdata.Ahrs1_bRollRate.data(t_init))-deg2rad(flightdata.Ahrs1_bRollRate.data(t_init:t_end))),'Color','b'); hold on;
 %plot_title = ['Yaw Rate over time - ', num2str(maneuver.Name)];
 %title(plot_title);
 xlabel('Time [s]');
 ylabel('\Delta{}p [rad/s]');
 %legend('Delta - Roll rate','Location','southeast');
-grid on;
+grid on; 
 
 % ax(3) = subplot(5,1,1);
 % plot(t, deg2rad(testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init)), 'Color','r'); hold on;
@@ -107,6 +108,7 @@ grid on;
 % %title(plot_title);
 % xlabel('Time [s]');
 % ylabel('r [rad/s]');
+%set(gca,'XTick',[]);
 % grid on;
 % %legend('Simulated Data','Flight Data','Location','southeast'); hold off;
 % 
@@ -119,17 +121,19 @@ grid on;
 % %legend('Delta - Yaw rate','Location','southeast');
 % grid on;
 
-ax(3) = subplot(5,1,3);
+ax(3) = subplot('Position',[0.1 0.46 0.8 0.16]);
 plot(t, testttt(:,2)+flightdata.Ahrs1_Roll.data(t_init), 'Color','r'); hold on;
 plot(t, flightdata.Ahrs1_Roll.data(t_init:t_end),'Color','b'); 
 %plot_title = ['Yaw Rate over time - ', num2str(maneuver.Name)];
 %title(plot_title);
-xlabel('Time [s]');
+%xlabel('Time [s]');
 ylabel('\phi [deg]');
-grid on;
+grid on; 
+set(gca,'XTick',[]);
+hold off;
 %legend('Simulated Data','Flight Data','Location','southeast'); hold off;
 
-ax(4) = subplot(5,1,4);
+ax(4) = subplot('Position',[0.1 0.3 0.8 0.16]);
 plot(t, abs(testttt(:,2)+flightdata.Ahrs1_Roll.data(t_init)-flightdata.Ahrs1_Roll.data(t_init:t_end)),'Color','b'); hold on;
 %plot_title = ['Yaw Rate over time - ', num2str(maneuver.Name)];
 %title(plot_title);
@@ -138,8 +142,8 @@ ylabel('\Delta{}\phi [deg/s]');
 %legend('Delta - Bank angle','Location','southeast');
 grid on;
 
-ax(5) = subplot(5,1,5);
-plot(t, u_input(maneuver.input,:), 'Color','k'); hold on;
+ax(5) = subplot('Position',[0.1 0.06 0.8 0.16]);
+plot(t, u_input(maneuver.input,:), 'Color','k'); 
 % plot_title = ['Yaw Rate over time - ', num2str(maneuver.Name)];
 % title(plot_title);
 xlabel('Time [s]');
@@ -147,12 +151,10 @@ ylabel('\delta_r [deg]');
 %legend('Rudder input','Location','northeast'); 
 grid on; 
 
-linkaxes(ax,'x')
-hold off;
+% linkaxes(ax,'x')
+% hold off;
 
-
-
-saveas(fig,[filename,'_r_phi_rud.png']);
+saveas(gcf,[filename,'_r_phi_rud.png']);
 
 end
 
