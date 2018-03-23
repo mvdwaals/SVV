@@ -5,8 +5,8 @@ open_data;
 
 
 
-t_init = 31920; %s*10 for short period
-t_end = 32300; %s*10
+t_init = 31920; %s*10 for short period (31920)
+t_end = 32300; %s*10 for short period (32300)
 
 
 %% CALCULATING AIRCRAFT MASS AS A FUNCTION OF TIME
@@ -167,48 +167,118 @@ time = t(t_init:t_end);
 time = time-time(1);
 response = lsim(sys,input,time);
 
-%%Plotting the pitch angle
-%yyaxis left
-%plot(time/10 , pitch(t_init:t_end) - pitch(t_init),'-' , 'Color','r'); hold on;
-%plot(time/10, response(:,3),'-' ,'Color','b'); hold on;
-%xlabel('Time [s]');
-%ylabel('Pitch Angle [deg]');
-%yyaxis right
-%plot(time/10 , delta_e(t_init:t_end), 'Color','k');
-%plot_title = (['Pitch angle over time']);
-%ylim([-4 4])
-%title(plot_title);
-%grid();
-%legend('flight data','model data','elevator deflection')
-%ylabel('Elevator angle [deg]');
-
-%%Plotting the pitch rate
+%% Plotting the pitch angle
+%{
 yyaxis left
-plot(time/10 , pitchrate(t_init:t_end) - pitchrate(t_init),'-' , 'Color','r'); hold on;
+plot(time/10 , pitch(t_init:t_end) - pitch(t_init),'-' , 'Color','r'); hold on;
+plot(time/10, response(:,3),'-' ,'Color','b'); hold on;
+xlabel('Time [s]','fontsize',18);
+ylabel('Pitch Angle [deg]','fontsize',18);
+yyaxis right
+plot(time/10 , delta_e(t_init:t_end), 'Color','k');
+plot_title = (['Pitch angle in the short period motion']);
+ylim([-4 4])
+title(plot_title,'fontsize',18);
+grid();
+legend({'flight data','model data','elevator deflection'},'fontsize',18)
+ylabel('Elevator angle [deg]','fontsize',18);
+saveas(gcf,'jksad.png'); 
+%}
+
+%% Plotting the pitch rate
+%{
+fig = figure;
+left_color = [0 0 0];
+right_color = [0 0 0];
+set(fig,'defaultAxesColorOrder',[left_color; right_color]);
+
+yyaxis left
+plot(time/10 , pitchrate(t_init:t_end),'-' , 'Color','r'); hold on;
 plot(time/10, response(:,4),'-' ,'Color','b'); hold on;
-xlabel('Time [s]');
-ylabel('Pitch Rate [deg/s]');
+xlabel('Time [s]','fontsize',18);
+ylabel('Pitch Rate [deg/s]','fontsize',18);
 yyaxis right
 plot(time/10 , delta_e(t_init:t_end), 'Color','k');
 plot_title = (['Pitch rate in the short period motion']);
 ylim([-4 4])
-title(plot_title);
+title(plot_title,'fontsize',18);
 grid();
-legend('flight data','model data','elevator deflection')
-ylabel('Elevator angle [deg]');
-saveas(gcf,'jksad.png');
+legend({'flight data','model data','elevator deflection'},'fontsize',18)
+ylabel('Elevator deflection [deg]','fontsize',18, 'Color','k');
+saveas(gcf,'jksad.png'); 
+%}            
 
-%%Plotting the angle of attack
-%plot(time , alpha(t_init:t_end)-alpha(t_init), time, response(:,2), time , delta_e(t_init:t_end))
-%legend('flight data','model data','elevator deflection')
 
-%%Plotting the horizontal velocity
-%plot(time , (Vtas(t_init:t_end)+Vtas(t_init)) , time, response(:,1), time , delta_e(t_init:t_end))
-%legend('flight data','model data','elevator deflection')
+%% Plotting the Difference
+%{
+percentage_error = abs(response(:,4) - pitchrate(t_init:t_end));
+plot (time/10,percentage_error);
+xlabel('Time [s]','fontsize',18);
+ylabel('Absolute Difference [deg/s]','fontsize',18);
+plot_title = (['Absolute Pitch Rate Difference (Numerical vs. Analytical)']);
+title(plot_title,'fontsize',18);
+grid();
+%}
+
+
+%% Plotting the angle of attack
+%{
+yyaxis left
+plot(time/10 , alpha(t_init:t_end) - alpha(t_init),'-' , 'Color','r'); hold on;
+plot(time/10, response(:,2),'-' ,'Color','b'); hold on;
+xlabel('Time [s]','fontsize',18);
+ylabel('Angle of attack [deg]','fontsize',18);
+yyaxis right
+plot(time/10 , delta_e(t_init:t_end), 'Color','k');
+plot_title = (['Angle of attack in the short period motion']);
+ylim([-4 4])
+title(plot_title,'fontsize',18);
+grid();
+legend({'flight data','model data','elevator deflection'},'fontsize',18)
+ylabel('Elevator angle [deg]','fontsize',18 , 'Color','k');
+%saveas(gcf,'jksad.png'); 
+%}
+
+%% Plotting the horizontal velocity
+
+fig = figure;
+left_color = [0 0 0];
+right_color = [0 0 0];
+set(fig,'defaultAxesColorOrder',[left_color; right_color]);
+
+yyaxis left
+plot(time/10 , Vtas(t_init:t_end)*0.51444,'-' , 'Color','r'); hold on;
+plot(time/10, response(:,1) ,'-' ,'Color','b'); hold on;
+xlabel('Time [s]','fontsize',18);
+ylabel('True airspeed [m/s]','fontsize',18);
+yyaxis right
+plot(time/10 , delta_e(t_init:t_end), 'Color','k');
+plot_title = (['True airspeed in the short period motion']);
+ylim([-4 4])
+title(plot_title,'fontsize',18);
+grid();
+legend({'flight data','model data','elevator deflection'},'fontsize',18)
+ylabel('Elevator deflection [deg]','fontsize',18, 'Color','k');
+saveas(gcf,'jksad.png'); 
+          
+
+
 
 % IN THE REPORT TALK ABOUT THE METHODS OF VERIFICATION WE USED TO COME TO
 % THE RIGHT ANSWER, WHICH ARE : SWITCHING EACH OTHERS THE WORK AND CHECKING
 % (I checked the C1,C2,C3 matrix derivation, Madelon fixed the output
 % plotting)
+
+
+
+
+
+
+
+
+
+
+
+%Plotting the discrepancy as a functon of time
 
 
