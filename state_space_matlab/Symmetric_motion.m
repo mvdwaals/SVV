@@ -4,7 +4,6 @@ load('Flighttestdata.mat');
 open_data;
 
 
-
 t_init = 31920; %s*10 for short period (31920)
 t_end = 32300; %s*10 for short period (32300)
 
@@ -248,7 +247,7 @@ set(fig,'defaultAxesColorOrder',[left_color; right_color]);
 
 yyaxis left
 plot(time/10 , Vtas(t_init:t_end)*0.51444,'-' , 'Color','r'); hold on;
-plot(time/10, response(:,1) ,'-' ,'Color','b'); hold on;
+plot(time/10, response(:,1)+Vtas(t_init)*0.51444 ,'-' ,'Color','b'); hold on;
 xlabel('Time [s]','fontsize',18);
 ylabel('True airspeed [m/s]','fontsize',18);
 yyaxis right
@@ -257,7 +256,7 @@ plot_title = (['True airspeed in the short period motion']);
 ylim([-4 4])
 title(plot_title,'fontsize',18);
 grid();
-legend({'flight data','model data','elevator deflection'},'fontsize',18)
+legend({'flight data','model data','elevator deflection'},'fontsize',18,'Location','southwest')
 ylabel('Elevator deflection [deg]','fontsize',18, 'Color','k');
 saveas(gcf,'jksad.png'); 
           

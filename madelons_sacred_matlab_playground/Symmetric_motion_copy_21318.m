@@ -163,16 +163,16 @@ displayzz = flightdata.display_graph_state.data(t_init:t_end);
 
 response = lsim(sys,input,time);
 
-figure(2233);
-
-%load('/Users/Mykolas/Documents/GitHub/SVV/Data reading/open.m')
-%plot (time, response(:,3))%t(0:0.1:310), pitch(3190*10:3500*10) )% t(0:0.1:310), pitch(3190*10:3500*10)) % pitch angle response
-%plot ( t(0:0.1:310), pitch(3190*10:3500*10))
-%plot(t(3190*10:3500*10),delta_e(3190*10:3500*10),t(3190*10:3500*10),pitch(3190*10:3500*10))
-subplot(1,2,1);
-plot(time,response(:,3)+pitch(t_init),'Color','b'); hold on;
-plot(time,pitch(t_init:t_end),'Color','g');
-subplot(1,2,2);
-plot(time,input); hold on;
-plot(time,displayss);
-plot(time,displayzz);
+% figure(2233);
+% 
+% %load('/Users/Mykolas/Documents/GitHub/SVV/Data reading/open.m')
+% %plot (time, response(:,3))%t(0:0.1:310), pitch(3190*10:3500*10) )% t(0:0.1:310), pitch(3190*10:3500*10)) % pitch angle response
+% %plot ( t(0:0.1:310), pitch(3190*10:3500*10))
+% %plot(t(3190*10:3500*10),delta_e(3190*10:3500*10),t(3190*10:3500*10),pitch(3190*10:3500*10))
+% subplot(1,2,1);
+% plot(time,response(:,3)+pitch(t_init),'Color','b'); hold on;
+% plot(time,pitch(t_init:t_end),'Color','g');
+% subplot(1,2,2);
+% plot(time,input); hold on;
+% plot(time,displayss);
+% plot(time,displayzz);
