@@ -54,7 +54,7 @@ Ve = fVe(Vt, rho)
 Vetilde = (fVetilde(Ve, Ws, W))[:-n_ign] #Ignore the last measurement (after deltacg)
 
 CN = 2 * W / (rho * Vt**2 * S)
-CN = CN[-2::] #Assumption!!!
+CN = CN[-2::]
 
 Deltaxcg = fDeltaxcg()[0] 
 ddeltae_dalpha, uu_intercept, r_value, uu_p_value, uu_std_err = stats.linregress(alpha_rad,deltae_rad) # Lots of unused (uu_) values
@@ -65,15 +65,15 @@ Cmdelta = avg(Cmdelta)
 Cmalpha = -ddeltae_dalpha * Cmdelta
 #print(Cmalpha)
 
-#Cmdelta_deg = Cmdelta / 180 * pi
-#Cmalpha_deg = Cmalpha / 180 * pi
+#Cmdelta = Cmdelta / 180 * pi
+#Cmalpha = Cmalpha / 180 * pi
 
 print('Cmdelta = '+str(round(Cmdelta,n_r))+' [1/rad], Cmalpha = '+str(round(Cmalpha,n_r))+' [1/rad] with r^2 = '+str(round(r_value**2,n_r)))
 
 Ttotal = fTtotal(T,n_tests, hp, M, FFl, FFr)
-Ts = fTtotal([T0], 1, [0], [0], [mdotfs], [mdotfs]) #Needs checking
-Tcs = Ts * 2 / (rho * Vt**2 * S)
-Tc = Ttotal * 2 / (rho * Vt**2 * S)
+Ts = fTtotal([T[0]], 1, [hp[0]], [M[0]], [mdotfs], [mdotfs]) #Needs checking
+Tcs = Ts * 2 / (rho * Vt**2 * d_eng**2)
+Tc = Ttotal * 2 / (rho * Vt**2 * d_eng**2)
 deltastareeq = (deltae_rad - CmTc * (Tcs - Tc) / Cmdelta)[:-n_ign] #Ignore the last measurement (after deltacg)
 Fstareaer = (Fe * Ws / W)[:-n_ign] #Ignore the last measurement (after deltacg)
 
@@ -91,6 +91,7 @@ plt.cla()
 plt.clf()
 
 plt.plot(arr[0], arr[2], 'o-')
+plt.gca().invert_yaxis()
 plt.grid()
 plt.xlabel('V~_e [m/s]')
 plt.ylabel('F*_eq [N]')

@@ -16,7 +16,8 @@ in_m = 0.0254
 mdotfs = 0.048 #kg/s
 CmTc = -0.0064
 C_air = 120 #K
-labda_air = 1.512041288e-6 #Changed from micro- to 
+labda_air = 1.512041288e-6 #Changed from micro- to
+d_eng = 0.686
 
 # Aircraft geometry
 S      = 30.00	          # wing area [m^2]
