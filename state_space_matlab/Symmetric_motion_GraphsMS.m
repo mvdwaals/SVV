@@ -6,11 +6,12 @@ open_data;
 
 colorz = get(gca, 'colororder');
 
-short_period = struct('Name','Short_Period','t_init',31920,'t_end',32300,'input',3);
+short_period = struct('Name','Short Period','t_init',31990,'t_end',32260,'input',3);
 %%% Fix actual maneuver time for phugoid
-phugoid = struct('Name','Phugoid','t_init',36550,'t_end',36750,'input',3);
+phugoid = struct('Name','Phugoid','t_init',32480,'t_end',34550,'input',3);
 
-maneuvers = [short_period, phugoid];
+
+maneuvers = [short_period];
 
 u_input = delta_e;
 
@@ -265,7 +266,7 @@ ylabel('Elevator angle [deg]','fontsize',18 , 'Color','k');
 %}
 
 %% Plotting the horizontal velocity
-
+%{
 fig = figure;
 left_color = [0 0 0];
 right_color = [0 0 0];
@@ -285,7 +286,7 @@ grid();
 legend({'flight data','model data','elevator deflection'},'fontsize',18,'Location','southwest')
 ylabel('Elevator deflection [deg]','fontsize',18, 'Color','k');
 saveas(gcf,'test.png'); 
-          
+   %}       
 
 
 
@@ -295,17 +296,17 @@ saveas(gcf,'test.png');
 % plotting)
 
 %% Combined plots new lay-out
-
+t_max = 2.7 %s
 
 figure();
 fig = gcf;
 fig.PaperUnits = 'centimeters';
 fig.PaperPosition = [0 0 10 14];
 
-%alpha-q plots
+%pitch-q plots
 
-flight_data_series = alpha(t_init:t_end);
-model_data_series = rad2deg(response(:,2))+alpha(t_init);
+flight_data_series = pitch(t_init:t_end);
+model_data_series = rad2deg(response(:,3))+pitch(t_init);
 ax(1) = subplot('Position',[0.125 0.77 0.85 0.21]);
 plot(t1, model_data_series, 'Color','b'); hold on;
 plot(t1, flight_data_series,'Color','r'); 
@@ -314,7 +315,8 @@ ylim_min = min([min(flight_data_series) min(model_data_series)]);
 ylim_max = max([max(flight_data_series) max(model_data_series)]);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
-ylabel('\alpha [deg]');
+xlim([0 t_max])
+ylabel('Pitch [deg]');
 set(gca,'XTick',[]);
 hold off;
 
@@ -327,14 +329,15 @@ ylim_min = min(delta_data_series);
 ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
+xlim([0 t_max])
 %xlabel('Time [s]');
-ylabel('\Delta{}\alpha [deg]');
+ylabel('\Delta{} Pitch [deg]');
 %legend('Delta - Bank angle','Location','southeast');
 grid on;
 
 
-model_data_series = response(:,4)+deg2rad(pitchrate(t_init));
-flight_data_series = deg2rad(pitchrate(t_init:t_end));
+model_data_series = rad2deg(response(:,4))+pitchrate(t_init);
+flight_data_series = pitchrate(t_init:t_end);
 ax(3) = subplot('Position',[0.125 0.41 0.85 0.21]);
 mod_plot = plot(t1, model_data_series, 'Color','b'); hold on;
 flt_plot = plot(t1, flight_data_series,'Color','r'); 
@@ -342,8 +345,9 @@ ylim_min = min([min(flight_data_series) min(model_data_series)]);
 ylim_max = max([max(flight_data_series) max(model_data_series)]);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
+xlim([0 t_max])
 grid on;
-ylabel('q [rad/s]');
+ylabel('q [deg/s]');
 set(gca,'XTick',[]);
 
 
@@ -354,7 +358,8 @@ ylim_min = min(delta_data_series);
 ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
-ylabel('\Delta{}q [rad/s]');
+xlim([0 t_max])
+ylabel('\Delta{}q [deg/s]');
 grid on;
 
 if maneuver.input == 1
@@ -374,6 +379,7 @@ ylim_min = min(input_data_series);
 ylim_max = max(input_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
+xlim([0 t_max])
 xlabel('Time [s]');
 ylabel(y_ax_inp);
 grid on; 
