@@ -21,9 +21,9 @@ spiral_1 = struct('Name','Spiral_1st','t_init',38250,'t_end',38850,'input',2);
 %spiral_2 = struct('Name','Spiral (2nd)','t_init',38900,'t_end',39500);
 spiral_2 = struct('Name','Spiral_2nd','t_init',38800,'t_end',39600,'input',2);
 
-%maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_1, spiral_2, aper_roll];
+
 maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_2, aper_roll];
-%maneuvers = [dutch_roll_undamped];
+
 colorz = get(gca, 'colororder');
 
 for maneuver = maneuvers
