@@ -107,3 +107,5 @@ state_space_matlab/groupafterus.mat
 state_space_matlab/randgroupdata.mat
 state_space_matlab/Symmetric_motion.m
 *.png
+*.png
+*.dat

@@ -87,8 +87,9 @@ def fDeltaxcg():
     return (abs(leftjump) + abs(rightjump))/2, (abs(leftjump) + abs(rightjump))/2*100/MAC
 
 #plotting
-#plt.xlabel("time [s]")
-#plt.ylabel("x_cg [%MAC]")
-#plt.plot(t,xbarcg)
-#plt.show()
+plt.xlabel("time [s]")
+plt.ylabel("x_cg [%MAC]")
+plt.plot(t,xbarcg)
+plt.grid()
+plt.savefig('graphcgt.png')
 
