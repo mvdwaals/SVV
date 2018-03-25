@@ -4,21 +4,22 @@ close all;
 load('flightdata.mat');
 Symmetric_motion_copy_21318;
 
-%Initial time: Aperiodic Roll
-aper_roll = struct('Name','Aperiodic Roll','t_init',35500,'t_end',36100,'input',1);
-
 %Initial time: Dutch Roll - Undamped
-dutch_roll_undamped = struct('Name','Dutch Roll - Undamped','t_init',36520,'t_end',36720,'input',2);
+dutch_roll_undamped = struct('Name','Dutch Roll - Undamped','t_init',36550,'t_end',36750);
 
 %Initial time: Dutch Roll - Yaw Damper
-dutch_roll_damped = struct('Name','Dutch Roll - Damped','t_init',37150,'t_end',37350,'input',2);
+dutch_roll_damped = struct('Name','Dutch Roll - Damped','t_init',37185,'t_end',37335);
+
+%Initial time: Aperiodic Roll
+%aper_roll = struct('Name','Aperiodic Roll','t_init',35555,'t_end',35625);
+aper_roll = struct('Name','Aperiodic Roll','t_init',35569,'t_end',35625);
 
 %Initial time: Spiral - 1st
-spiral_1 = struct('Name','Spiral (1st)','t_init',38250,'t_end',38850,'input',2);
+spiral_1 = struct('Name','Spiral (1st)','t_init',38250,'t_end',38850);
 
 %Initial time: Spiral - 2nd
 %spiral_2 = struct('Name','Spiral (2nd)','t_init',38900,'t_end',39500);
-spiral_2 = struct('Name','Spiral (2nd)','t_init',38800,'t_end',39800,'input',2);
+spiral_2 = struct('Name','Spiral (2nd)','t_init',38800,'t_end',39600);
 
 %maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_1, spiral_2, aper_roll];
 maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_2, aper_roll];
@@ -29,6 +30,7 @@ for maneuver = maneuvers
     t_init = maneuver.t_init;
     t_end = maneuver.t_end;
 
+%maneuver = struct(
 Asymmetric_motion;
 
 
@@ -64,9 +66,9 @@ t = flightdata.time.data(t_init:t_end);
  display_state = [flightdata.display_active_screen.data(t_init:t_end)';...
                     flightdata.display_graph_state.data(t_init:t_end)'];
 
-t= t-t(1);
+ t= t-t(1);
  
-sys = ss(A,B,C,D);
+ sys = ss(A,B,C,D);
  
 testttt = lsim(sys,u_input,t);
 
@@ -134,24 +136,31 @@ filename = ['All_plots_',maneuver.Name,'.png'];
 saveas(gcf,filename);
 
 figure('Visible','off');
-subplot(1,2,1);
+subplot(2,2,[1 3])
 plot(t, testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init), 'Color','b'); hold on;
 plot(t, flightdata.Ahrs1_bYawRate.data(t_init:t_end),'Color','r');
 ylabel('Yaw rate [rad/s]');
-yyaxis right;
-plot(t,u_input(maneuver.input,:),'Color','k');
+
+
 plot_title = (['Yaw Rate over time - ', num2str(maneuver.Name)]);
 ylabel('\delta [deg]');
 %title(plot_title);
 legend('Simulated Data','Flight Data','Location','southeast');
 xlabel('Time [s]');
+grid on;
 hold off;
 
-subplot(1,2,2);
+subplot(2,2,2)
+plot(t,u_input(maneuver.input,:),'Color','k');
+ylabel('\delta [deg]');
+xlabel('Time [s]');
+grid on;
+
+subplot(2,2,4)
 plot(t, testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init)-flightdata.Ahrs1_bYawRate.data(t_init:t_end), 'Color','b'); hold on;
 ylabel('\Delta Yaw rate [rad/s]');
 plot_title = (['Delta Yaw Rate over time - ', num2str(maneuver.Name)]);
-ylabel('\delta [deg]');
+ylabel('Delta [rad/s]');
 %title(plot_title);
 xlabel('Time [s]');
 
