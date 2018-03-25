@@ -186,8 +186,8 @@ sys = ss(A,B,C,D);
 input = delta_e(t_init:t_end)-delta_e(t_init);
 
 time = t(t_init:t_end);
-t = time'/10;
-t = t-t(1);
+t1 = time'/10;
+t1 = t1-t1(1);
 time = time-time(1);
 response = lsim(sys,input,time);
 
@@ -306,8 +306,8 @@ fig.PaperPosition = [0 0 10 14];
 flight_data_series = alpha(t_init:t_end);
 model_data_series = response(:,2)+alpha(t_init);
 ax(1) = subplot('Position',[0.125 0.77 0.85 0.21]);
-plot(t, model_data_series, 'Color','b'); hold on;
-plot(t, flight_data_series,'Color','r'); 
+plot(t1, model_data_series, 'Color','b'); hold on;
+plot(t1, flight_data_series,'Color','r'); 
 grid on;
 ylim_min = min([min(flight_data_series) min(model_data_series)]);
 ylim_max = max([max(flight_data_series) max(model_data_series)]);
@@ -319,7 +319,7 @@ hold off;
 
 delta_data_series = model_data_series - flight_data_series;
 ax(2) = subplot('Position',[0.125 0.66 0.85 0.10]);
-plot(t, delta_data_series,'Color',colorz(5,:)); hold on;
+plot(t1, delta_data_series,'Color',colorz(5,:)); hold on;
 %plot_title = ['Yaw Rate over time - ', num2str(maneuver.Name)];
 %title(plot_title);
 ylim_min = min(delta_data_series);
@@ -335,8 +335,8 @@ grid on;
 model_data_series = response(:,1)+Vtas(t_init);
 flight_data_series = Vtas(t_init:t_end);
 ax(3) = subplot('Position',[0.125 0.41 0.85 0.21]);
-mod_plot = plot(t, model_data_series, 'Color','b'); hold on;
-flt_plot = plot(t, flight_data_series,'Color','r'); 
+mod_plot = plot(t1, model_data_series, 'Color','b'); hold on;
+flt_plot = plot(t1, flight_data_series,'Color','r'); 
 ylim_min = min([min(flight_data_series) min(model_data_series)]);
 ylim_max = max([max(flight_data_series) max(model_data_series)]);
 ylim_range = ylim_max - ylim_min;
@@ -348,7 +348,7 @@ set(gca,'XTick',[]);
 
 delta_data_series = model_data_series - flight_data_series;
 ax(4) = subplot('Position',[0.125 0.3 0.85 0.10]);
-del_plot = plot(t, delta_data_series,'Color',colorz(5,:)); hold on;
+del_plot = plot(t1, delta_data_series,'Color',colorz(5,:)); hold on;
 ylim_min = min(delta_data_series);
 ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
@@ -368,7 +368,7 @@ end
 
 input_data_series = u_input(t_init:t_end);
 ax(5) = subplot('Position',[0.125 0.1 0.85 0.16]);
-inp_plot = plot(t, u_input(t_init:t_end), 'Color','k'); 
+inp_plot = plot(t1, u_input(t_init:t_end), 'Color','k'); 
 ylim_min = min(input_data_series);
 ylim_max = max(input_data_series);
 ylim_range = ylim_max - ylim_min;
@@ -383,9 +383,6 @@ newUnits = 'normalized';
 set(hL,'Position', newPosition,'Units', newUnits);
 
 saveas(gcf,[filename,'_alpha_q.png']);
-
-
-
 end
 
 
