@@ -3,9 +3,9 @@ clear all;
 load('Flighttestdata.mat');
 open_data;
 
-
 t_init = 31920; %s*10 for short period (31920)
 t_end = 32300; %s*10 for short period (32300)
+
 
 
 %% CALCULATING AIRCRAFT MASS AS A FUNCTION OF TIME
@@ -160,7 +160,7 @@ D = [ 0 ; 0 ; 0 ; 0; 1 ];
 %% Create a state space model
 
 sys = ss(A,B,C,D);
-input = delta_e(t_init:t_end)-delta_e(t_init);
+input = (delta_e(t_init:t_end)-delta_e(t_init))*pi/180;
 
 time = t(t_init:t_end);
 time = time-time(1);
@@ -170,7 +170,7 @@ response = lsim(sys,input,time);
 %{
 yyaxis left
 plot(time/10 , pitch(t_init:t_end) - pitch(t_init),'-' , 'Color','r'); hold on;
-plot(time/10, response(:,3),'-' ,'Color','b'); hold on;
+plot(time/10, response(:,3)*180/pi,'-' ,'Color','b'); hold on;
 xlabel('Time [s]','fontsize',18);
 ylabel('Pitch Angle [deg]','fontsize',18);
 yyaxis right
@@ -193,7 +193,7 @@ set(fig,'defaultAxesColorOrder',[left_color; right_color]);
 
 yyaxis left
 plot(time/10 , pitchrate(t_init:t_end),'-' , 'Color','r'); hold on;
-plot(time/10, response(:,4),'-' ,'Color','b'); hold on;
+plot(time/10, response(:,4)*180/pi,'-' ,'Color','b'); hold on;
 xlabel('Time [s]','fontsize',18);
 ylabel('Pitch Rate [deg/s]','fontsize',18);
 yyaxis right
@@ -205,16 +205,15 @@ grid();
 legend({'flight data','model data','elevator deflection'},'fontsize',18)
 ylabel('Elevator deflection [deg]','fontsize',18, 'Color','k');
 saveas(gcf,'jksad.png'); 
-%}            
-
+%}
 
 %% Plotting the Difference
 %{
-percentage_error = abs(response(:,4) - pitchrate(t_init:t_end));
+percentage_error = abs(response(:,4)*180/pi - pitchrate(t_init:t_end));
 plot (time/10,percentage_error);
 xlabel('Time [s]','fontsize',18);
 ylabel('Absolute Difference [deg/s]','fontsize',18);
-plot_title = (['Absolute Pitch Rate Difference (Numerical vs. Analytical)']);
+plot_title = (['Absolute Pitch Rate Difference (Numerical vs. Flight Data)']);
 title(plot_title,'fontsize',18);
 grid();
 %}
@@ -222,9 +221,14 @@ grid();
 
 %% Plotting the angle of attack
 %{
+fig = figure;
+left_color = [0 0 0];
+right_color = [0 0 0];
+set(fig,'defaultAxesColorOrder',[left_color; right_color]);
+
 yyaxis left
 plot(time/10 , alpha(t_init:t_end) - alpha(t_init),'-' , 'Color','r'); hold on;
-plot(time/10, response(:,2),'-' ,'Color','b'); hold on;
+plot(time/10, response(:,2)*180/pi,'-' ,'Color','b'); hold on;
 xlabel('Time [s]','fontsize',18);
 ylabel('Angle of attack [deg]','fontsize',18);
 yyaxis right
@@ -237,9 +241,18 @@ legend({'flight data','model data','elevator deflection'},'fontsize',18)
 ylabel('Elevator angle [deg]','fontsize',18 , 'Color','k');
 %saveas(gcf,'jksad.png'); 
 %}
+%{
+percentage_error = abs(response(:,2)*180/pi - alpha(t_init:t_end));
+plot (time/10,percentage_error);
+xlabel('Time [s]','fontsize',18);
+ylabel('Absolute Difference [deg]','fontsize',18);
+plot_title = (['Absolute Angle of Attack Difference (Numerical vs. Flight Data)']);
+title(plot_title,'fontsize',18);
+grid();
+%}
 
 %% Plotting the horizontal velocity
-
+%{
 fig = figure;
 left_color = [0 0 0];
 right_color = [0 0 0];
@@ -259,7 +272,7 @@ grid();
 legend({'flight data','model data','elevator deflection'},'fontsize',18,'Location','southwest')
 ylabel('Elevator deflection [deg]','fontsize',18, 'Color','k');
 saveas(gcf,'jksad.png'); 
-          
+   %}      
 
 
 
