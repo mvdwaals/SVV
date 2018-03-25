@@ -1,11 +1,12 @@
 % Citation 550 - Linear simulation
 clear all;
+close all;
 load('Flighttestdata.mat');
 open_data;
 
 colorz = get(gca, 'colororder');
 
-short_period = struct('Name','Short Period','t_init',31920,'t_end',32300,'input',3);
+short_period = struct('Name','Short_Period','t_init',31920,'t_end',32300,'input',3);
 %%% Fix actual maneuver time for phugoid
 phugoid = struct('Name','Phugoid','t_init',36550,'t_end',36750,'input',3);
 
@@ -183,7 +184,7 @@ D = [ 0 ; 0 ; 0 ; 0; 1 ];
 %% Create a state space model
 
 sys = ss(A,B,C,D);
-input = delta_e(t_init:t_end)-delta_e(t_init);
+input = deg2rad(delta_e(t_init:t_end)-delta_e(t_init));
 
 time = t(t_init:t_end);
 t1 = time'/10;
@@ -283,7 +284,7 @@ title(plot_title,'fontsize',18);
 grid();
 legend({'flight data','model data','elevator deflection'},'fontsize',18,'Location','southwest')
 ylabel('Elevator deflection [deg]','fontsize',18, 'Color','k');
-saveas(gcf,'jksad.png'); 
+saveas(gcf,'test.png'); 
           
 
 
@@ -304,7 +305,7 @@ fig.PaperPosition = [0 0 10 14];
 %alpha-q plots
 
 flight_data_series = alpha(t_init:t_end);
-model_data_series = response(:,2)+alpha(t_init);
+model_data_series = rad2deg(response(:,2))+alpha(t_init);
 ax(1) = subplot('Position',[0.125 0.77 0.85 0.21]);
 plot(t1, model_data_series, 'Color','b'); hold on;
 plot(t1, flight_data_series,'Color','r'); 
@@ -319,7 +320,7 @@ hold off;
 
 delta_data_series = model_data_series - flight_data_series;
 ax(2) = subplot('Position',[0.125 0.66 0.85 0.10]);
-plot(t1, delta_data_series,'Color',colorz(5,:)); hold on;
+plot(t1, delta_data_series, 'Color',colorz(5,:)); 
 %plot_title = ['Yaw Rate over time - ', num2str(maneuver.Name)];
 %title(plot_title);
 ylim_min = min(delta_data_series);
@@ -327,13 +328,13 @@ ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 %xlabel('Time [s]');
-ylabel('\Delta{}\alpha [deg/s]');
+ylabel('\Delta{}\alpha [deg]');
 %legend('Delta - Bank angle','Location','southeast');
 grid on;
 
 
-model_data_series = response(:,1)+Vtas(t_init);
-flight_data_series = Vtas(t_init:t_end);
+model_data_series = response(:,4)+deg2rad(pitchrate(t_init));
+flight_data_series = deg2rad(pitchrate(t_init:t_end));
 ax(3) = subplot('Position',[0.125 0.41 0.85 0.21]);
 mod_plot = plot(t1, model_data_series, 'Color','b'); hold on;
 flt_plot = plot(t1, flight_data_series,'Color','r'); 
@@ -383,6 +384,7 @@ newUnits = 'normalized';
 set(hL,'Position', newPosition,'Units', newUnits);
 
 saveas(gcf,[filename,'_alpha_q.png']);
+hold off;
 end
 
 
