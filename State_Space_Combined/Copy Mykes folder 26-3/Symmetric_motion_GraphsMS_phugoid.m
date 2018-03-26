@@ -8,7 +8,7 @@ colorz = get(gca, 'colororder');
 
 short_period = struct('Name','Short_Period','t_init',31990,'t_end',32260,'input',3);
 %%% Fix actual maneuver time for phugoid
-phugoid = struct('Name','Phugoid','t_init',32477,'t_end',34550,'input',3);
+phugoid = struct('Name','Phugoid','t_init',32477,'t_end',34557,'input',3);
 
 
 maneuvers = [phugoid];
