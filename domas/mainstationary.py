@@ -136,6 +136,9 @@ plt.cla()
 plt.clf()
 
 #Plotting CL-CD
+fit = np.polyfit(CL,CD,2)
+x = np.linspace(min(CL),max(CL))
+plt.plot(x,fit[0]*x**2 + fit[1] *x + fit[2])
 plt.scatter(CL, CD, label = 'Automatically recorded')
 plt.scatter(CLs, CDs, label = 'Manually recorded')
 plt.title('$C_D/C_L$ at clean configuration,\n Mach range = '+Mrange+', Re range = '+Rerange)
