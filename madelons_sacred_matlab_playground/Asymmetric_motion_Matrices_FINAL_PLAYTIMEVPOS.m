@@ -2,7 +2,6 @@ clear all;
 close all;
 
 load('flightdata.mat');
-Symmetric_motion_copy_21318;
 
 %Initial time: Dutch Roll - Undamped
 dutch_roll_undamped = struct('Name','Dutch_Roll_Undamped','t_init',36550,'t_end',36750,'input',2);
@@ -32,6 +31,8 @@ for maneuver = maneuvers
     t_end = maneuver.t_end;
 
 Asymmetric_motion;
+Symmetric_motion_copy_FINAL;
+
 
 V=V0;
 
@@ -87,8 +88,8 @@ fig.PaperPosition = [0 0 10 14];
 % ax(5) = subplot('Position',[0.125 0.1 0.85 0.16]);
 
 ax(1) = subplot('Position',[0.125 0.77 0.85 0.21]);
-flight_data_series = deg2rad(flightdata.Ahrs1_bRollRate.data(t_init:t_end));
-model_data_series = deg2rad(testttt(:,3)+flightdata.Ahrs1_bRollRate.data(t_init));
+flight_data_series = flightdata.Ahrs1_bRollRate.data(t_init:t_end);
+model_data_series = testttt(:,3)+flightdata.Ahrs1_bRollRate.data(t_init);
 plot(t, flight_data_series, 'Color','r'); hold on;
 plot(t, model_data_series,'Color','b'); 
 %xlabel('Time [s]');
@@ -98,7 +99,7 @@ ylim_max = max([max(flight_data_series) max(model_data_series)]);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 set(gca,'XTick',[]);
-ylabel('p [rad/s]');
+ylabel('p [deg/s]');
 hold off;
 
 delta_data_series = model_data_series - flight_data_series;
@@ -112,11 +113,11 @@ ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 %xlabel('Time [s]');
-ylabel('\Delta{}p [rad/s]');
+ylabel('\Delta{}p [deg/s]');
 %legend('Delta - Roll rate','Location','southeast');
 
-model_data_series = deg2rad(testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init));
-flight_data_series = deg2rad(flightdata.Ahrs1_bYawRate.data(t_init:t_end));
+model_data_series = testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init);
+flight_data_series = flightdata.Ahrs1_bYawRate.data(t_init:t_end);
 ax(3) = subplot('Position',[0.125 0.41 0.85 0.21]);
 mod_plot = plot(t, model_data_series, 'Color','b'); hold on;
 flt_plot = plot(t, flight_data_series,'Color','r'); 
@@ -125,7 +126,7 @@ ylim_max = max([max(flight_data_series) max(model_data_series)]);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 xlabel('Time [s]');
-ylabel('r [rad/s]');
+ylabel('r [deg/s]');
 set(gca,'XTick',[]);
 grid on;
 %legend('Simulated Data','Flight Data','Location','southeast'); hold off;
@@ -138,7 +139,7 @@ ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 %xlabel('Time [s]');
-ylabel('\Delta{}r [rad/s]');
+ylabel('\Delta{}r [deg/s]');
 %legend('Delta - Yaw rate','Location','southeast');
 grid on;
 
@@ -164,7 +165,7 @@ ylabel(y_ax_inp);
 %legend('Rudder input','Location','northeast'); 
 grid on;
 
-hL = legend([mod_plot,flt_plot, del_plot,inp_plot],{'Simulation Model','Flight Data','Input','Delta'},'Orientation','horizontal');
+hL = legend([mod_plot,flt_plot, del_plot,inp_plot],{'Simulation Model','Flight Data','Delta','Input'},'Orientation','horizontal');
 newPosition = [0.5 0.01 0.01 0.03];
 newUnits = 'normalized';
 set(hL,'Position', newPosition,'Units', newUnits);
@@ -205,13 +206,13 @@ ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 %xlabel('Time [s]');
-ylabel('\Delta{}\phi [deg/s]');
+ylabel('\Delta{}\phi [deg]');
 %legend('Delta - Bank angle','Location','southeast');
 grid on;
 
 
-model_data_series = deg2rad(testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init));
-flight_data_series = deg2rad(flightdata.Ahrs1_bYawRate.data(t_init:t_end));
+model_data_series = testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init);
+flight_data_series = flightdata.Ahrs1_bYawRate.data(t_init:t_end);
 ax(3) = subplot('Position',[0.125 0.41 0.85 0.21]);
 mod_plot = plot(t, model_data_series, 'Color','b'); hold on;
 flt_plot = plot(t, flight_data_series,'Color','r'); 
@@ -221,11 +222,11 @@ ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 grid on;
 %xlabel('Time [s]');
-ylabel('r [rad/s]');
+ylabel('r [deg/s]');
 set(gca,'XTick',[]);
 %legend('Simulated Data','Flight Data','Location','southeast'); hold off;
 
-delta_data_series = deg2rad(testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init)-flightdata.Ahrs1_bYawRate.data(t_init:t_end));
+delta_data_series = testttt(:,4)+flightdata.Ahrs1_bYawRate.data(t_init)-flightdata.Ahrs1_bYawRate.data(t_init:t_end);
 ax(4) = subplot('Position',[0.125 0.3 0.85 0.10]);
 del_plot = plot(t, delta_data_series,'Color',colorz(5,:)); hold on;
 ylim_min = min(delta_data_series);
@@ -233,7 +234,7 @@ ylim_max = max(delta_data_series);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 %xlabel('Time [s]','Units','normalized','Position',[0.07 -0.2]);
-ylabel('\Delta{}r [rad/s]');
+ylabel('\Delta{}r [deg/s]');
 %legend('Delta - Yaw rate','Location','southeast');
 grid on;
 
