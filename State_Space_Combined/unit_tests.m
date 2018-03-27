@@ -51,9 +51,9 @@ for maneuver = maneuvers
     da = flightdata.delta_a.data(maneuver.t_init:maneuver.t_end);
     dr = flightdata.delta_r.data(maneuver.t_init:maneuver.t_end);
     de = flightdata.delta_e.data(maneuver.t_init:maneuver.t_end);
-    inputs = [ da' - da(1);
-               dr' - dr(1);
-               de' - de(1)];
+    inputs = [ transpose(da) - da(1);
+               transpose(dr) - dr(1);
+               transpose(de) - de(1)];
     abs_inputs = abs(inputs);
     avg_inputs = mean(abs_inputs,2);
     [~,idx] = max(avg_inputs);
