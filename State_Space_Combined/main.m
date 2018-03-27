@@ -1,5 +1,5 @@
 clear all;
-close all;
+%close all;
 
 %Load flightdata
 load('flightdata.mat');
@@ -42,7 +42,7 @@ sys = ss(A,B,C,D);
 opt = pzoptions;
 opt.Ylim = [-3 3];
 
-figure(1);
+%figure();
 pzplot(sys);
 
 %Calculate response
@@ -133,6 +133,7 @@ ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 set(gca,'XTick',[]);
 ylabel(y_label_1);
+title(maneuver.Name)
 hold off;
 
 ax(2) = subplot('Position',[0.125 0.66 0.85 0.10]);
