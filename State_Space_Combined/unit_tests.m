@@ -99,7 +99,7 @@ ac_mass_time
 Cit_par
 V=V0;
 
-fprintf('\nVerifying symetric matrices\n')
+fprintf('\nVerifying symmetric matrices\n')
 fprintf('============================\n')
 Matrices_s
 

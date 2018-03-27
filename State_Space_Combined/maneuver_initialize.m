@@ -32,4 +32,3 @@ maneuvers_sym = [short_period, phugoid];
 %Group all maneuvers
 
 maneuvers = [dutch_roll_undamped, dutch_roll_damped, spiral_2, aper_roll, short_period, phugoid];
-%maneuvers = aper_roll;

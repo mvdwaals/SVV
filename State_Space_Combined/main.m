@@ -1,5 +1,5 @@
 clear all;
-%close all;
+close all;
 
 %Load flightdata
 load('flightdata.mat');
@@ -42,7 +42,7 @@ sys = ss(A,B,C,D);
 opt = pzoptions;
 opt.Ylim = [-3 3];
 
-%figure();
+figure(3);
 pzplot(sys);
 
 %Calculate response
@@ -50,7 +50,7 @@ response = lsim(sys,u_input,t);
 
 filename = maneuver.Name;
 
-%P - R plots
+%Plotting commences
 figure();
 fig = gcf;
 fig.PaperUnits = 'centimeters';
@@ -68,8 +68,8 @@ if strcmp(maneuver.first_plot,'phi_bank_angle')
     flight_data_series1 = flightdata.Ahrs1_Roll.data(t_init:t_end);
     model_data_series1 = response(:,2)+flightdata.Ahrs1_Roll.data(t_init);
     delta_data_series1 = model_data_series1 - flight_data_series1;
-    y_label_1 = '\phi [deg/s]';
-    y_label_1_delta = '\Delta{}\phi [deg/s]';
+    y_label_1 = '\phi [deg]';
+    y_label_1_delta = '\Delta{}\phi [deg]';
 end
 
 if strcmp(maneuver.first_plot,'theta_pitch_angle')
@@ -104,6 +104,14 @@ if strcmp(maneuver.second_plot,'q_pitch_rate')
     y_label_2_delta = '\Delta{}q [deg/s]';
 end
 
+if strcmp(maneuver.second_plot,'p_roll_rate')
+    flight_data_series2 = flightdata.Ahrs1_bRollRate.data(t_init:t_end);
+    model_data_series2 = response(:,3)+flightdata.Ahrs1_bRollRate.data(t_init);
+    delta_data_series2 = model_data_series1 - flight_data_series1;
+    y_label_2 = 'p [deg/s]';
+    y_label_2_delta = '\Delta{}p [deg/s]';
+end
+
 %Load input
 
 
@@ -131,9 +139,8 @@ ylim_min = min([min(flight_data_series1) min(model_data_series1)]);
 ylim_max = max([max(flight_data_series1) max(model_data_series1)]);
 ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
-set(gca,'XTick',[]);
+set(gca,'xticklabel',[]);
 ylabel(y_label_1);
-title(maneuver.Name)
 hold off;
 
 ax(2) = subplot('Position',[0.125 0.66 0.85 0.10]);
@@ -154,7 +161,7 @@ ylim_range = ylim_max - ylim_min;
 ylim([ylim_min-0.1*ylim_range ylim_max+0.1*ylim_range]);
 xlabel('Time [s]');
 ylabel(y_label_2);
-set(gca,'XTick',[]);
+set(gca,'xticklabel',[]);
 grid on;
 
 ax(4) = subplot('Position',[0.125 0.3 0.85 0.10]);
