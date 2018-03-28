@@ -31,7 +31,7 @@ Tmta_c = data_not_si_T[9]
 
 empty_weight = empty_weight_lb * lb_kg
 fuel_weight = fuel_weight_lb * lb_kg
-m_tot = sum(person_weight) + empty_weight + fuel_weight
+m_tot = sum(person_weight_value) + empty_weight + fuel_weight
 
 hp = hp_ft * ft_m
 Vc = Vc_kts * kts_ms
@@ -68,7 +68,7 @@ Cmalpha = -ddeltae_dalpha * Cmdelta
 #Cmdelta = Cmdelta / 180 * pi
 #Cmalpha = Cmalpha / 180 * pi
 
-print('Cmdelta = '+str(round(Cmdelta,n_r))+' [1/rad], Cmalpha = '+str(round(Cmalpha,n_r))+' [1/rad] with r^2 = '+str(round(r_value**2,n_r)))
+print('$C_{m_\delta}$ = '+str(round(Cmdelta,n_r))+' [1/rad], $C_{m_\alpha}$ = '+str(round(Cmalpha,n_r))+' [1/rad] with r^2 = '+str(round(r_value**2,n_r)))
 
 Ttotal = fTtotal(T,n_tests, hp, M, FFl, FFr)
 Ts = fTtotal([T[0]], 1, [hp[0]], [M[0]], [mdotfs], [mdotfs]) #Needs checking
@@ -81,11 +81,13 @@ arr = np.array([Vetilde, deltastareeq, Fstareaer]).T
 arr = arr[arr[:,0].argsort()]
 arr = arr.T
 
+plt.cla()
+plt.clf()
 plt.plot(arr[0], arr[1], 'o-')
 plt.gca().invert_yaxis()
 plt.grid()
-plt.xlabel('V~_e [m/s]')
-plt.ylabel('delta*_eq [rad]')
+plt.xlabel('$V^~_e$ [m/s]')
+plt.ylabel('$\delta^*_{eq}$ [rad]')
 plt.savefig('graphdeltastar.png')
 plt.cla()
 plt.clf()
@@ -93,8 +95,8 @@ plt.clf()
 plt.plot(arr[0], arr[2], 'o-')
 plt.gca().invert_yaxis()
 plt.grid()
-plt.xlabel('V~_e [m/s]')
-plt.ylabel('F*_eq [N]')
+plt.xlabel('$\tilde{V}_e$ [m/s]')
+plt.ylabel('$F^*_{eq}$ [N]')
 plt.savefig('graphfstar.png')
 plt.cla()
 plt.clf()
